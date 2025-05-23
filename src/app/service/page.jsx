@@ -1,7 +1,9 @@
+// src/app/service/page.jsx
 'use client'
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 
 export default function ServicePage() {
   const [activeTab, setActiveTab] = useState('masters')
@@ -11,11 +13,11 @@ export default function ServicePage() {
   
   const masters = [
     {
-      id: 1,
+      id: 'aleksey-kirillov',
       name: 'Алексей Кириллов',
       avatar: '👨‍🔧',
       rating: 4.8,
-      reviews: 156,
+      reviewsCount: 156,
       installations: 483,
       region: 'Ташкент',
       experience: '8 лет',
@@ -26,11 +28,11 @@ export default function ServicePage() {
       phone: '+998 90 123 45 67'
     },
     {
-      id: 2,
+      id: 'sergey-mihaylov',
       name: 'Сергей Михайлов',
       avatar: '👨‍💼',
       rating: 4.9,
-      reviews: 142,
+      reviewsCount: 142,
       installations: 392,
       region: 'Ташкент',
       experience: '6 лет',
@@ -47,7 +49,7 @@ export default function ServicePage() {
       id: 1,
       name: 'АвтоПро Центр',
       rating: 4.8,
-      reviews: 234,
+      reviewsCount: 234,
       address: 'Ташкент, ул. Амира Темура, 12',
       phone: '+998 71 123 45 67',
       workHours: 'Пн-Сб: 9:00-19:00',
@@ -170,12 +172,16 @@ export default function ServicePage() {
                       {master.avatar}
                     </motion.div>
                     <div className="flex-1">
-                      <h3 className="font-bold text-lg">{master.name}</h3>
+                      <Link href={`/service/${master.id}`}>
+                        <h3 className="font-bold text-lg hover:text-purple-600 cursor-pointer transition">
+                          {master.name}
+                        </h3>
+                      </Link>
                       <p className="text-gray-600">{master.region}</p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl text-yellow-400">★ {master.rating}</div>
-                      <p className="text-sm text-gray-500">{master.reviews} отзывов</p>
+                      <p className="text-sm text-gray-500">{master.reviewsCount} отзывов</p>
                     </div>
                   </div>
                   
@@ -223,12 +229,12 @@ export default function ServicePage() {
                     >
                       Записаться
                     </button>
-                    <button
-                      onClick={() => setSelectedMaster(master)}
-                      className="w-full border border-purple-600 text-purple-600 py-2 rounded-xl"
+                    <Link
+                      href={`/service/${master.id}`}
+                      className="block w-full text-center border border-purple-600 text-purple-600 py-2 rounded-xl hover:bg-purple-50 transition"
                     >
                       Подробнее
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>
@@ -254,7 +260,7 @@ export default function ServicePage() {
                   </div>
                   <div className="text-right">
                     <div className="text-yellow-400">★ {dealer.rating}</div>
-                    <p className="text-sm text-gray-500">{dealer.reviews} отзывов</p>
+                    <p className="text-sm text-gray-500">{dealer.reviewsCount} отзывов</p>
                   </div>
                 </div>
                 

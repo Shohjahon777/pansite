@@ -1,3 +1,4 @@
+// src/components/layout/Navbar.jsx
 'use client'
 
 import Link from 'next/link'
@@ -20,21 +21,20 @@ export default function Header() {
     { href: '/', label: 'Главная' },
     { href: '/products', label: 'Продукты' },
     { href: '/service', label: 'Установка' },
-    { href: '/account/warranty', label: 'Гарантия' },
+    { href: '/advantages', label: 'Преимущества' },
+    { href: '/reviews', label: 'Отзывы' },
     { href: '/account', label: 'Кабинет' },
   ]
   
   const isHomePage = pathname === '/'
+  const headerBg = isScrolled || !isHomePage ? 'bg-white shadow-lg' : 'bg-transparent'
+  const textColor = isScrolled || !isHomePage ? 'text-gray-900' : 'text-white'
   
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed w-full z-[100] transition-all duration-300 ${
-        isScrolled || !isHomePage
-          ? 'bg-white shadow-lg' 
-          : 'bg-transparent'
-      }`}
+      className={`fixed w-full z-[100] transition-all duration-300 ${headerBg}`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -46,14 +46,13 @@ export default function Header() {
             >
               <span className="text-white font-bold text-xl">P</span>
             </motion.div>
-            <span className={`font-bold text-xl transition-colors ${
-              isScrolled || !isHomePage ? 'text-gray-900' : 'text-white'
-            }`}>
+            <span className={`font-bold text-xl transition-colors ${textColor}`}>
               Pandora
             </span>
           </Link>
           
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -73,13 +72,18 @@ export default function Header() {
                 )}
               </Link>
             ))}
+            <Link
+              href="/account/warranty"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition"
+            >
+              Проверить гарантию
+            </Link>
           </div>
           
+          {/* Mobile menu button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden p-2 transition-colors ${
-              isScrolled || !isHomePage ? 'text-gray-900' : 'text-white'
-            }`}
+            className={`md:hidden p-2 transition-colors ${textColor}`}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -91,6 +95,33 @@ export default function Header() {
             </svg>
           </button>
         </div>
+        
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden bg-white rounded-2xl shadow-lg mt-2 p-4"
+          >
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className="block py-2 text-gray-700 hover:text-purple-600"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link
+              href="/account/warranty"
+              onClick={() => setIsMenuOpen(false)}
+              className="block mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-center"
+            >
+              Проверить гарантию
+            </Link>
+          </motion.div>
+        )}
       </nav>
     </motion.header>
   )

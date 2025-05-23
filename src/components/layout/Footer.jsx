@@ -1,3 +1,4 @@
+// src/components/layout/Footer.jsx
 'use client'
 
 import Link from 'next/link'
@@ -8,27 +9,33 @@ export default function Footer() {
   
   const footerLinks = {
     products: [
-      { href: '/products', label: 'Каталог систем' },
-      { href: '/products#compare', label: 'Сравнение моделей' },
-      { href: '/products#dx91', label: 'Pandora DX-91' },
-      { href: '/products#dx4gs', label: 'Pandora DX-4GS' },
+      { href: '/products', label: 'Все системы' },
+      { href: '/products/dx91', label: 'Pandora DX-91' },
+      { href: '/products/dx4gs', label: 'Pandora DX-4GS' },
+      { href: '/products/dxl5000', label: 'Pandora DXL-5000' },
+      { href: '/advantages', label: 'Преимущества' },
     ],
     service: [
       { href: '/service', label: 'Найти мастера' },
       { href: '/service#dealers', label: 'Дилерские центры' },
       { href: '/service#map', label: 'Карта установщиков' },
-      { href: '/service#reviews', label: 'Отзывы клиентов' },
+      { href: '/reviews', label: 'Все отзывы' },
     ],
     support: [
       { href: '/account', label: 'Личный кабинет' },
-      { href: '/account#warranty', label: 'Проверка гарантии' },
+      { href: '/account/warranty', label: 'Проверка гарантии' },
       { href: '/account#requests', label: 'Мои заявки' },
-      { href: '/account#help', label: 'Поддержка' },
+      { href: '/service', label: 'Записаться на установку' },
     ],
+    company: [
+      { href: '/advantages', label: 'О технологиях' },
+      { href: '/reviews', label: 'Отзывы клиентов' },
+      { href: '/#contacts', label: 'Контакты' },
+    ]
   }
   
   const socialLinks = [
-    { icon: '📱', href: '#', label: 'Telegram' },
+    { icon: '📱', href: 'https://t.me/pandorauz', label: 'Telegram' },
     { icon: '📷', href: '#', label: 'Instagram' },
     { icon: '💬', href: '#', label: 'WhatsApp' },
   ]
@@ -36,15 +43,15 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
+          <div className="md:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">P</span>
               </div>
               <span className="font-bold text-xl">Pandora</span>
             </Link>
-            <p className="text-gray-400 mb-4">
+            <p className="text-gray-400 mb-6">
               Официальный дистрибьютор охранных систем Pandora в Узбекистане
             </p>
             <div className="flex space-x-4">
@@ -52,6 +59,7 @@ export default function Footer() {
                 <motion.a
                   key={social.label}
                   href={social.href}
+                  target="_blank"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition"
@@ -120,7 +128,7 @@ export default function Footer() {
       </div>
       
       {/* Floating action buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col space-y-3">
+      <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-50">
         <motion.a
           href="https://t.me/pandorauz"
           target="_blank"

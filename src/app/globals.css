@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+:root {
+  --purple-600: #9333ea;
+  --purple-700: #7c3aed;
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+.page-container {
+  @apply pt-20;
+}
+
+.btn-primary {
+  @apply bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-medium;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition font-medium;
+}

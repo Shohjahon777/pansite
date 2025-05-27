@@ -32,12 +32,12 @@ export default function WarrantyPage() {
   }
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
       <div className="max-w-2xl mx-auto px-4 py-12">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-center mb-4"
+          className="text-4xl font-bold text-center mb-4 text-white"
         >
           Проверка гарантии
         </motion.h1>
@@ -45,7 +45,7 @@ export default function WarrantyPage() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center text-gray-600 mb-12"
+          className="text-center text-gray-400 mb-12"
         >
           Введите серийный номер вашего устройства Pandora
         </motion.p>
@@ -53,16 +53,16 @@ export default function WarrantyPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-3xl shadow-xl p-8"
+          className="bg-gray-900 rounded-3xl shadow-xl p-8 border border-gray-800"
         >
           <form onSubmit={handleCheck} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">Серийный номер</label>
+              <label className="block text-sm font-medium mb-2 text-gray-400">Серийный номер</label>
               <input
                 type="text"
                 placeholder="Например: PD1234567890"
                 required
-                className="w-full px-6 py-4 text-lg border-2 rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                className="w-full px-6 py-4 text-lg bg-gray-800 border-2 border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-transparent text-white placeholder-gray-500"
                 value={serialNumber}
                 onChange={(e) => setSerialNumber(e.target.value)}
                 disabled={isChecking}
@@ -77,7 +77,7 @@ export default function WarrantyPage() {
               disabled={isChecking}
               className={`w-full py-4 rounded-xl font-semibold text-lg transition ${
                 isChecking
-                  ? 'bg-gray-300 text-gray-500'
+                  ? 'bg-gray-700 text-gray-500'
                   : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg'
               }`}
             >
@@ -99,49 +99,49 @@ export default function WarrantyPage() {
               animate={{ opacity: 1, y: 0 }}
               className={`mt-8 p-6 rounded-2xl ${
                 result.isValid
-                  ? 'bg-gradient-to-br from-green-50 to-green-100 border border-green-200'
-                  : 'bg-gradient-to-br from-red-50 to-red-100 border border-red-200'
+                  ? 'bg-gradient-to-br from-green-900/20 to-green-800/20 border border-green-700'
+                  : 'bg-gradient-to-br from-red-900/20 to-red-800/20 border border-red-700'
               }`}
             >
               {result.isValid ? (
                 <>
                   <div className="flex items-center mb-4">
                     <div className="text-4xl mr-3">✅</div>
-                    <h3 className="text-xl font-semibold text-green-800">Гарантия активна</h3>
+                    <h3 className="text-xl font-semibold text-green-400">Гарантия активна</h3>
                   </div>
                   
                   <div className="space-y-3">
-                    <div className="bg-white rounded-xl p-4">
-                      <p className="text-sm text-gray-600">Серийный номер</p>
-                      <p className="font-semibold">{result.serialNumber}</p>
+                    <div className="bg-gray-800 rounded-xl p-4">
+                      <p className="text-sm text-gray-400">Серийный номер</p>
+                      <p className="font-semibold text-white">{result.serialNumber}</p>
                     </div>
                     
-                    <div className="bg-white rounded-xl p-4">
-                      <p className="text-sm text-gray-600">Модель устройства</p>
-                      <p className="font-semibold">{result.model}</p>
+                    <div className="bg-gray-800 rounded-xl p-4">
+                      <p className="text-sm text-gray-400">Модель устройства</p>
+                      <p className="font-semibold text-white">{result.model}</p>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-white rounded-xl p-4">
-                        <p className="text-sm text-gray-600">Дата установки</p>
-                        <p className="font-semibold">{result.installDate}</p>
+                      <div className="bg-gray-800 rounded-xl p-4">
+                        <p className="text-sm text-gray-400">Дата установки</p>
+                        <p className="font-semibold text-white">{result.installDate}</p>
                       </div>
-                      <div className="bg-white rounded-xl p-4">
-                        <p className="text-sm text-gray-600">Действует до</p>
-                        <p className="font-semibold">{result.expiryDate}</p>
+                      <div className="bg-gray-800 rounded-xl p-4">
+                        <p className="text-sm text-gray-400">Действует до</p>
+                        <p className="font-semibold text-white">{result.expiryDate}</p>
                       </div>
                     </div>
                     
-                    <div className="bg-white rounded-xl p-4">
-                      <p className="text-sm text-gray-600">Установщик</p>
-                      <p className="font-semibold">{result.installer}</p>
-                      <a href={`tel:${result.installerPhone}`} className="text-purple-600 text-sm hover:text-purple-700">
+                    <div className="bg-gray-800 rounded-xl p-4">
+                      <p className="text-sm text-gray-400">Установщик</p>
+                      <p className="font-semibold text-white">{result.installer}</p>
+                      <a href={`tel:${result.installerPhone}`} className="text-purple-400 text-sm hover:text-purple-300">
                         {result.installerPhone}
                       </a>
                     </div>
                     
-                    <div className="bg-purple-100 rounded-xl p-4 text-center">
-                      <p className="text-purple-800">
+                    <div className="bg-purple-900/20 rounded-xl p-4 text-center border border-purple-800">
+                      <p className="text-purple-400">
                         До окончания гарантии осталось <span className="font-bold">{result.remainingDays} дней</span>
                       </p>
                     </div>
@@ -151,22 +151,22 @@ export default function WarrantyPage() {
                 <>
                   <div className="flex items-center mb-4">
                     <div className="text-4xl mr-3">❌</div>
-                    <h3 className="text-xl font-semibold text-red-800">Гарантия не найдена</h3>
+                    <h3 className="text-xl font-semibold text-red-400">Гарантия не найдена</h3>
                   </div>
-                  <p className="text-red-700 mb-4">
+                  <p className="text-red-300 mb-4">
                     Устройство с серийным номером <strong>{serialNumber}</strong> не найдено в базе данных.
                   </p>
-                  <div className="bg-white rounded-xl p-4">
-                    <p className="text-sm mb-2">Возможные причины:</p>
-                    <ul className="text-sm text-gray-600 space-y-1">
+                  <div className="bg-gray-800 rounded-xl p-4">
+                    <p className="text-sm mb-2 text-gray-400">Возможные причины:</p>
+                    <ul className="text-sm text-gray-500 space-y-1">
                       <li>• Неверно введен серийный номер</li>
                       <li>• Устройство не зарегистрировано</li>
                       <li>• Истек срок гарантии</li>
                     </ul>
                   </div>
                   <div className="mt-4 text-center">
-                    <p className="text-sm text-gray-600 mb-2">Нужна помощь?</p>
-                    <a href="tel:+998901234567" className="text-purple-600 font-semibold hover:text-purple-700">
+                    <p className="text-sm text-gray-400 mb-2">Нужна помощь?</p>
+                    <a href="tel:+998901234567" className="text-purple-400 font-semibold hover:text-purple-300">
                       Позвонить в поддержку
                     </a>
                   </div>
@@ -176,9 +176,9 @@ export default function WarrantyPage() {
           )}
         </motion.div>
         
-        <div className="mt-12 bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="font-semibold text-lg mb-3">Как найти серийный номер?</h2>
-          <div className="space-y-2 text-gray-600">
+        <div className="mt-12 bg-gray-900 rounded-2xl shadow-lg p-6 border border-gray-800">
+          <h2 className="font-semibold text-lg mb-3 text-white">Как найти серийный номер?</h2>
+          <div className="space-y-2 text-gray-400">
             <p>• На корпусе основного блока сигнализации</p>
             <p>• В гарантийном талоне</p>
             <p>• В документах об установке</p>

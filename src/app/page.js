@@ -209,19 +209,19 @@ export default function HomePage() {
       </section>
 
       {/* Преимущества */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-4xl font-bold text-center mb-4"
+            className="text-4xl font-bold text-center mb-4 text-white"
           >
             Преимущества Pandora
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-center text-gray-600 mb-12"
+            className="text-center text-gray-400 mb-12"
           >
             Почему нас выбирают более 1000 клиентов
           </motion.p>
@@ -233,7 +233,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition group"
+                className="bg-gray-900 p-6 rounded-2xl border border-gray-800 hover:border-purple-600 transition group"
               >
                 <motion.div
                   className="text-4xl mb-4 inline-block"
@@ -242,10 +242,10 @@ export default function HomePage() {
                 >
                   {item.icon}
                 </motion.div>
-                <h3 className="font-semibold text-lg mb-2 group-hover:text-purple-600 transition">
+                <h3 className="font-semibold text-lg mb-2 group-hover:text-purple-400 transition text-white">
                   {item.title}
                 </h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <p className="text-gray-400">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -253,9 +253,9 @@ export default function HomePage() {
       </section>
 
       {/* Быстрые ссылки */}
-      <section className="py-20">
+      <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Быстрые действия</h2>
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">Быстрые действия</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {quickActions.map((action, i) => (
@@ -292,22 +292,22 @@ export default function HomePage() {
       </section>
 
       {/* Яндекс Карта */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4">Ближайшие точки</h2>
-          <p className="text-center text-gray-600 mb-12">Дилеры и мастера рядом с вами</p>
+          <h2 className="text-4xl font-bold text-center mb-4 text-white">Ближайшие точки</h2>
+          <p className="text-center text-gray-400 mb-12">Дилеры и мастера рядом с вами</p>
 
           <div className="relative">
             <div id="map" className="w-full h-[500px] rounded-3xl shadow-2xl overflow-hidden"></div>
 
-            <div className="absolute bottom-6 left-6 bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="font-bold text-lg mb-2">В Узбекистане:</h3>
-              <div className="space-y-1 text-sm">
+            <div className="absolute bottom-6 left-6 bg-gray-900 rounded-2xl shadow-xl p-6 border border-gray-800">
+              <h3 className="font-bold text-lg mb-2 text-white">В Узбекистане:</h3>
+              <div className="space-y-1 text-sm text-gray-300">
                 <p>• 15+ официальных дилеров</p>
                 <p>• 50+ сертифицированных мастеров</p>
                 <p>• Установка в день обращения</p>
               </div>
-              <Link href="/service" className="mt-4 text-purple-600 font-medium inline-flex items-center hover:text-purple-700">
+              <Link href="/service" className="mt-4 text-purple-400 font-medium inline-flex items-center hover:text-purple-300">
                 Показать всех
                 <span className="ml-2">→</span>
               </Link>

@@ -1,4 +1,3 @@
-// src/app/service/page.jsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -93,12 +92,12 @@ export default function ServicePage() {
   }, [activeTab])
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl font-bold text-center mb-4"
+          className="text-5xl font-bold text-center mb-4 text-white"
         >
           Установка и обслуживание
         </motion.h1>
@@ -106,14 +105,14 @@ export default function ServicePage() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center text-gray-600 mb-8"
+          className="text-center text-gray-400 mb-8"
         >
           Найдите сертифицированного мастера рядом с вами
         </motion.p>
         
         {/* Табы */}
         <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-full shadow-lg p-1 flex">
+          <div className="bg-gray-900 rounded-full shadow-lg p-1 flex">
             {[
               { value: 'masters', label: 'Мастера', icon: '👨‍🔧' },
               { value: 'dealers', label: 'Дилеры', icon: '🏢' },
@@ -125,7 +124,7 @@ export default function ServicePage() {
                 className={`px-6 py-2 rounded-full transition flex items-center ${
                   activeTab === tab.value
                     ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                    : 'text-gray-600 hover:text-purple-600'
+                    : 'text-gray-400 hover:text-purple-400'
                 }`}
               >
                 <span className="mr-2">{tab.icon}</span>
@@ -141,7 +140,7 @@ export default function ServicePage() {
             <select
               value={selectedRegion}
               onChange={e => setSelectedRegion(e.target.value)}
-              className="px-6 py-2 bg-white rounded-full shadow-lg"
+              className="px-6 py-2 bg-gray-900 rounded-full shadow-lg border border-gray-800 text-gray-300"
             >
               <option value="all">Все регионы</option>
               <option value="Ташкент">Ташкент</option>
@@ -161,7 +160,7 @@ export default function ServicePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="bg-white rounded-3xl shadow-xl overflow-hidden group"
+                className="bg-gray-900 rounded-3xl shadow-xl overflow-hidden group border border-gray-800"
               >
                 <div className="p-6">
                   <div className="flex items-center mb-4">
@@ -173,11 +172,11 @@ export default function ServicePage() {
                     </motion.div>
                     <div className="flex-1">
                       <Link href={`/service/${master.id}`}>
-                        <h3 className="font-bold text-lg hover:text-purple-600 cursor-pointer transition">
+                        <h3 className="font-bold text-lg hover:text-purple-400 cursor-pointer transition text-white">
                           {master.name}
                         </h3>
                       </Link>
-                      <p className="text-gray-600">{master.region}</p>
+                      <p className="text-gray-400">{master.region}</p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl text-yellow-400">★ {master.rating}</div>
@@ -187,7 +186,7 @@ export default function ServicePage() {
                   
                   <div className="flex flex-wrap gap-2 mb-4">
                     {master.badges.map((badge, j) => (
-                      <span key={j} className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+                      <span key={j} className="text-xs bg-purple-900/20 text-purple-400 px-3 py-1 rounded-full border border-purple-800">
                         {badge}
                       </span>
                     ))}
@@ -195,24 +194,24 @@ export default function ServicePage() {
                   
                   <div className="space-y-2 mb-4 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Опыт:</span>
-                      <span className="font-medium">{master.experience}</span>
+                      <span className="text-gray-500">Опыт:</span>
+                      <span className="font-medium text-gray-300">{master.experience}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Установок:</span>
-                      <span className="font-medium">{master.installations}</span>
+                      <span className="text-gray-500">Установок:</span>
+                      <span className="font-medium text-gray-300">{master.installations}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Ответ:</span>
-                      <span className="font-medium text-green-600">{master.responseTime}</span>
+                      <span className="text-gray-500">Ответ:</span>
+                      <span className="font-medium text-green-400">{master.responseTime}</span>
                     </div>
                   </div>
                   
                   <div className="mb-4">
-                    <p className="text-sm text-gray-600 mb-1">Специализация:</p>
+                    <p className="text-sm text-gray-500 mb-1">Специализация:</p>
                     <div className="flex flex-wrap gap-1">
                       {master.specialization.map((spec, j) => (
-                        <span key={j} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                        <span key={j} className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-400">
                           {spec}
                         </span>
                       ))}
@@ -231,7 +230,7 @@ export default function ServicePage() {
                     </button>
                     <Link
                       href={`/service/${master.id}`}
-                      className="block w-full text-center border border-purple-600 text-purple-600 py-2 rounded-xl hover:bg-purple-50 transition"
+                      className="block w-full text-center border border-purple-600 text-purple-400 py-2 rounded-xl hover:bg-purple-900/20 transition"
                     >
                       Подробнее
                     </Link>
@@ -251,12 +250,12 @@ export default function ServicePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-white rounded-3xl shadow-xl p-6"
+                className="bg-gray-900 rounded-3xl shadow-xl p-6 border border-gray-800"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="font-bold text-xl">{dealer.name}</h3>
-                    <p className="text-gray-600">{dealer.address}</p>
+                    <h3 className="font-bold text-xl text-white">{dealer.name}</h3>
+                    <p className="text-gray-400">{dealer.address}</p>
                   </div>
                   <div className="text-right">
                     <div className="text-yellow-400">★ {dealer.rating}</div>
@@ -265,15 +264,15 @@ export default function ServicePage() {
                 </div>
                 
                 <div className="space-y-2 mb-4 text-sm">
-                  <p><span className="font-medium">Телефон:</span> {dealer.phone}</p>
-                  <p><span className="font-medium">Время работы:</span> {dealer.workHours}</p>
+                  <p className="text-gray-300"><span className="font-medium text-gray-400">Телефон:</span> {dealer.phone}</p>
+                  <p className="text-gray-300"><span className="font-medium text-gray-400">Время работы:</span> {dealer.workHours}</p>
                 </div>
                 
                 <div className="mb-4">
-                  <p className="text-sm font-medium mb-2">Услуги:</p>
+                  <p className="text-sm font-medium mb-2 text-gray-400">Услуги:</p>
                   <div className="flex flex-wrap gap-1">
                     {dealer.services.map((service, j) => (
-                      <span key={j} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                      <span key={j} className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-400">
                         {service}
                       </span>
                     ))}
@@ -281,16 +280,16 @@ export default function ServicePage() {
                 </div>
                 
                 <div className="flex gap-2 mb-4">
-                  {dealer.parking && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">🚗 Парковка</span>}
-                  {dealer.wifi && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">📶 Wi-Fi</span>}
-                  {dealer.lounge && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">☕ Зона ожидания</span>}
+                  {dealer.parking && <span className="text-xs bg-green-900/20 text-green-400 px-2 py-1 rounded border border-green-800">🚗 Парковка</span>}
+                  {dealer.wifi && <span className="text-xs bg-blue-900/20 text-blue-400 px-2 py-1 rounded border border-blue-800">📶 Wi-Fi</span>}
+                  {dealer.lounge && <span className="text-xs bg-purple-900/20 text-purple-400 px-2 py-1 rounded border border-purple-800">☕ Зона ожидания</span>}
                 </div>
                 
                 <div className="flex gap-2">
                   <button className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-xl">
                     Записаться
                   </button>
-                  <a href={`tel:${dealer.phone}`} className="px-4 py-2 bg-gray-100 rounded-xl">
+                  <a href={`tel:${dealer.phone}`} className="px-4 py-2 bg-gray-800 rounded-xl text-gray-300">
                     📞
                   </a>
                 </div>
@@ -312,23 +311,23 @@ export default function ServicePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
             onClick={() => setShowBooking(false)}
           >
             <motion.div
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
-              className="bg-white rounded-3xl p-8 max-w-md w-full"
+              className="bg-gray-900 rounded-3xl p-8 max-w-md w-full border border-gray-800"
               onClick={e => e.stopPropagation()}
             >
-              <h2 className="text-2xl font-bold mb-4">Запись к мастеру</h2>
-              <p className="text-gray-600 mb-6">Мастер: {selectedMaster.name}</p>
+              <h2 className="text-2xl font-bold mb-4 text-white">Запись к мастеру</h2>
+              <p className="text-gray-400 mb-6">Мастер: {selectedMaster.name}</p>
               
               <form className="space-y-4">
-                <input type="text" placeholder="Ваше имя" className="w-full px-4 py-3 border rounded-xl" />
-                <input type="tel" placeholder="Телефон" className="w-full px-4 py-3 border rounded-xl" />
-                <input type="date" className="w-full px-4 py-3 border rounded-xl" />
-                <select className="w-full px-4 py-3 border rounded-xl">
+                <input type="text" placeholder="Ваше имя" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500" />
+                <input type="tel" placeholder="Телефон" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500" />
+                <input type="date" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
+                <select className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white">
                   <option>9:00 - 11:00</option>
                   <option>11:00 - 13:00</option>
                   <option>14:00 - 16:00</option>

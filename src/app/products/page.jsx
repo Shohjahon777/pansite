@@ -1,4 +1,3 @@
-// src/app/products/page.jsx
 'use client'
 
 import { useState } from 'react'
@@ -72,12 +71,12 @@ export default function ProductsPage() {
  }
  
  return (
-   <div className="page-container min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+   <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
      <div className="max-w-7xl mx-auto px-4 py-12">
        <motion.h1 
          initial={{ opacity: 0, y: -20 }}
          animate={{ opacity: 1, y: 0 }}
-         className="text-5xl font-bold text-center mb-4"
+         className="text-5xl font-bold text-center mb-4 text-white"
        >
          Выберите охранную систему
        </motion.h1>
@@ -85,14 +84,14 @@ export default function ProductsPage() {
        <motion.p
          initial={{ opacity: 0 }}
          animate={{ opacity: 1 }}
-         className="text-center text-gray-600 mb-12"
+         className="text-center text-gray-400 mb-12"
        >
          Подберем идеальное решение для вашего автомобиля
        </motion.p>
        
        {/* Фильтры */}
        <div className="flex justify-center mb-12">
-         <div className="bg-white rounded-full shadow-lg p-1 flex">
+         <div className="bg-gray-900 rounded-full shadow-lg p-1 flex">
            {[
              { value: 'all', label: 'Все системы' },
              { value: 'standard', label: 'Стандарт' },
@@ -105,7 +104,7 @@ export default function ProductsPage() {
                className={`px-6 py-2 rounded-full transition ${
                  selectedCategory === filter.value
                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                   : 'text-gray-600 hover:text-purple-600'
+                   : 'text-gray-400 hover:text-purple-400'
                }`}
              >
                {filter.label}
@@ -134,7 +133,7 @@ export default function ProductsPage() {
              
              <motion.div
                whileHover={{ y: -5 }}
-               className="bg-white rounded-3xl shadow-xl overflow-hidden h-full"
+               className="bg-gray-900 rounded-3xl border border-gray-800 overflow-hidden h-full"
              >
                <Link href={`/products/${product.name}`}>
                  <div className={`h-48 bg-gradient-to-br ${product.color} relative overflow-hidden cursor-pointer`}>
@@ -159,14 +158,14 @@ export default function ProductsPage() {
                
                <div className="p-6">
                  <div className="mb-4">
-                   <div className="text-3xl font-bold text-purple-600">${product.price}</div>
-                   <div className="text-gray-600">или ${product.monthly}/мес</div>
+                   <div className="text-3xl font-bold text-purple-400">${product.price}</div>
+                   <div className="text-gray-400">или ${product.monthly}/мес</div>
                  </div>
                  
                  <div className="space-y-2 mb-6">
                    {product.features.slice(0, 3).map((feature, j) => (
-                     <div key={j} className="flex items-center text-sm">
-                       <span className="text-purple-600 mr-2">✓</span>
+                     <div key={j} className="flex items-center text-sm text-gray-300">
+                       <span className="text-purple-400 mr-2">✓</span>
                        {feature}
                      </div>
                    ))}
@@ -174,8 +173,8 @@ export default function ProductsPage() {
                  </div>
                  
                  <div className="mb-6">
-                   <div className="text-sm text-gray-600 mb-1">Совместимость</div>
-                   <div className="w-full bg-gray-200 rounded-full h-2">
+                   <div className="text-sm text-gray-400 mb-1">Совместимость</div>
+                   <div className="w-full bg-gray-800 rounded-full h-2">
                      <div 
                        className={`h-full rounded-full bg-gradient-to-r ${product.color}`}
                        style={{ width: product.compatibility }}
@@ -195,7 +194,7 @@ export default function ProductsPage() {
                    </button>
                    <Link 
                      href={`/products/${product.name}`}
-                     className="block w-full text-center py-2 rounded-xl border-2 border-gray-300 text-gray-600 hover:border-purple-600 transition"
+                     className="block w-full text-center py-2 rounded-xl border-2 border-gray-700 text-gray-400 hover:border-purple-600 hover:text-purple-400 transition"
                    >
                      Подробнее
                    </Link>
@@ -209,8 +208,8 @@ export default function ProductsPage() {
                      }}
                      className={`w-full py-2 rounded-xl border-2 transition ${
                        compareList.includes(product.id)
-                         ? 'border-purple-600 text-purple-600 bg-purple-50'
-                         : 'border-gray-300 text-gray-600 hover:border-purple-600'
+                         ? 'border-purple-600 text-purple-400 bg-purple-900/20'
+                         : 'border-gray-700 text-gray-400 hover:border-purple-600'
                      }`}
                    >
                      {compareList.includes(product.id) ? '✓ В сравнении' : 'Сравнить'}
@@ -246,23 +245,23 @@ export default function ProductsPage() {
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            exit={{ opacity: 0 }}
-           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
            onClick={() => setShowModal(false)}
          >
            <motion.div
              initial={{ scale: 0.9 }}
              animate={{ scale: 1 }}
              exit={{ scale: 0.9 }}
-             className="bg-white rounded-3xl p-8 max-w-md w-full"
+             className="bg-gray-900 rounded-3xl p-8 max-w-md w-full border border-gray-800"
              onClick={e => e.stopPropagation()}
            >
-             <h2 className="text-2xl font-bold mb-6">Быстрая заявка</h2>
+             <h2 className="text-2xl font-bold mb-6 text-white">Быстрая заявка</h2>
              <form onSubmit={handleSubmit} className="space-y-4">
                <input
                  type="text"
                  placeholder="Ваше имя"
                  required
-                 className="w-full px-4 py-3 border rounded-xl"
+                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500"
                  value={formData.name}
                  onChange={e => setFormData({...formData, name: e.target.value})}
                />
@@ -270,7 +269,7 @@ export default function ProductsPage() {
                  type="tel"
                  placeholder="+998 XX XXX XX XX"
                  required
-                 className="w-full px-4 py-3 border rounded-xl"
+                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500"
                  value={formData.phone}
                  onChange={e => setFormData({...formData, phone: e.target.value})}
                />
@@ -278,14 +277,14 @@ export default function ProductsPage() {
                  type="text"
                  placeholder="Марка и модель авто"
                  required
-                 className="w-full px-4 py-3 border rounded-xl"
+                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500"
                  value={formData.car}
                  onChange={e => setFormData({...formData, car: e.target.value})}
                />
                <textarea
                  placeholder="Комментарий (необязательно)"
                  rows="3"
-                 className="w-full px-4 py-3 border rounded-xl"
+                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500"
                  value={formData.comment}
                  onChange={e => setFormData({...formData, comment: e.target.value})}
                />
@@ -308,49 +307,49 @@ export default function ProductsPage() {
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            exit={{ opacity: 0 }}
-           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
            onClick={() => setShowComparison(false)}
          >
            <motion.div
              initial={{ scale: 0.9 }}
              animate={{ scale: 1 }}
-             className="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+             className="bg-gray-900 rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-800"
              onClick={e => e.stopPropagation()}
            >
-             <h2 className="text-2xl font-bold mb-6">Сравнение систем</h2>
+             <h2 className="text-2xl font-bold mb-6 text-white">Сравнение систем</h2>
              <div className="overflow-x-auto">
                <table className="w-full">
                  <thead>
                    <tr>
-                     <th className="text-left p-2">Характеристика</th>
+                     <th className="text-left p-2 text-gray-400">Характеристика</th>
                      {compareList.map(id => {
                        const product = products.find(p => p.id === id)
-                       return <th key={id} className="text-center p-2">{product.name}</th>
+                       return <th key={id} className="text-center p-2 text-white">{product.name}</th>
                      })}
                    </tr>
                  </thead>
                  <tbody>
-                   <tr className="border-t">
-                     <td className="p-2">Цена</td>
+                   <tr className="border-t border-gray-800">
+                     <td className="p-2 text-gray-400">Цена</td>
                      {compareList.map(id => {
                        const product = products.find(p => p.id === id)
-                       return <td key={id} className="text-center p-2 font-bold">${product.price}</td>
+                       return <td key={id} className="text-center p-2 font-bold text-purple-400">${product.price}</td>
                      })}
                    </tr>
-                   <tr className="border-t">
-                     <td className="p-2">Рейтинг</td>
+                   <tr className="border-t border-gray-800">
+                     <td className="p-2 text-gray-400">Рейтинг</td>
                      {compareList.map(id => {
                        const product = products.find(p => p.id === id)
-                       return <td key={id} className="text-center p-2">⭐ {product.rating}</td>
+                       return <td key={id} className="text-center p-2 text-yellow-400">⭐ {product.rating}</td>
                      })}
                    </tr>
-                   <tr className="border-t">
-                     <td className="p-2">Основные функции</td>
+                   <tr className="border-t border-gray-800">
+                     <td className="p-2 text-gray-400">Основные функции</td>
                      {compareList.map(id => {
                        const product = products.find(p => p.id === id)
                        return (
                          <td key={id} className="text-center p-2">
-                           <ul className="text-sm text-left">
+                           <ul className="text-sm text-left text-gray-300">
                              {product.features.map((f, i) => <li key={i}>• {f}</li>)}
                            </ul>
                          </td>
@@ -362,7 +361,7 @@ export default function ProductsPage() {
              </div>
              <button
                onClick={() => setShowComparison(false)}
-               className="mt-6 px-6 py-2 bg-gray-200 rounded-xl"
+               className="mt-6 px-6 py-2 bg-gray-800 rounded-xl text-gray-300"
              >
                Закрыть
              </button>

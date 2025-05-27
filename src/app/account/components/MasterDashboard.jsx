@@ -63,11 +63,11 @@ export default function MasterDashboard() {
   }
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Кабинет мастера</h1>
-          <button className="text-purple-600 hover:text-purple-700">
+          <h1 className="text-3xl font-bold text-white">Кабинет мастера</h1>
+          <button className="text-purple-400 hover:text-purple-300">
             Выйти →
           </button>
         </div>
@@ -77,49 +77,49 @@ export default function MasterDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white p-4 rounded-xl shadow text-center"
+            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
           >
-            <p className="text-3xl font-bold text-purple-600">{stats.today}</p>
-            <p className="text-gray-600">Сегодня</p>
-            <p className="text-sm text-green-600">+${stats.income.today}</p>
+            <p className="text-3xl font-bold text-purple-400">{stats.today}</p>
+            <p className="text-gray-400">Сегодня</p>
+            <p className="text-sm text-green-400">+${stats.income.today}</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white p-4 rounded-xl shadow text-center"
+            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
           >
-            <p className="text-3xl font-bold text-purple-600">{stats.week}</p>
-            <p className="text-gray-600">За неделю</p>
-            <p className="text-sm text-green-600">+${stats.income.week}</p>
+            <p className="text-3xl font-bold text-purple-400">{stats.week}</p>
+            <p className="text-gray-400">За неделю</p>
+            <p className="text-sm text-green-400">+${stats.income.week}</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white p-4 rounded-xl shadow text-center"
+            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
           >
-            <p className="text-3xl font-bold text-purple-600">{stats.month}</p>
-            <p className="text-gray-600">За месяц</p>
-            <p className="text-sm text-green-600">+${stats.income.month}</p>
+            <p className="text-3xl font-bold text-purple-400">{stats.month}</p>
+            <p className="text-gray-400">За месяц</p>
+            <p className="text-sm text-green-400">+${stats.income.month}</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white p-4 rounded-xl shadow text-center"
+            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
           >
-            <p className="text-3xl font-bold text-purple-600">{stats.total}</p>
-            <p className="text-gray-600">Всего</p>
+            <p className="text-3xl font-bold text-purple-400">{stats.total}</p>
+            <p className="text-gray-400">Всего</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white p-4 rounded-xl shadow text-center"
+            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
           >
-            <p className="text-3xl font-bold text-yellow-500">⭐ {stats.rating}</p>
-            <p className="text-gray-600">Рейтинг</p>
+            <p className="text-3xl font-bold text-yellow-400">⭐ {stats.rating}</p>
+            <p className="text-gray-400">Рейтинг</p>
           </motion.div>
         </div>
         
@@ -130,7 +130,7 @@ export default function MasterDashboard() {
             className={`px-6 py-2 rounded-lg transition ${
               activeTab === 'requests'
                 ? 'bg-purple-600 text-white'
-                : 'bg-white text-gray-600'
+                : 'bg-gray-800 text-gray-400 border border-gray-700'
             }`}
           >
             Заявки
@@ -140,7 +140,7 @@ export default function MasterDashboard() {
             className={`px-6 py-2 rounded-lg transition ${
               activeTab === 'schedule'
                 ? 'bg-purple-600 text-white'
-                : 'bg-white text-gray-600'
+                : 'bg-gray-800 text-gray-400 border border-gray-700'
             }`}
           >
             Расписание
@@ -150,7 +150,7 @@ export default function MasterDashboard() {
             className={`px-6 py-2 rounded-lg transition ${
               activeTab === 'profile'
                 ? 'bg-purple-600 text-white'
-                : 'bg-white text-gray-600'
+                : 'bg-gray-800 text-gray-400 border border-gray-700'
             }`}
           >
             Профиль
@@ -161,7 +161,7 @@ export default function MasterDashboard() {
           <div className="space-y-6">
             {/* Новые заявки */}
             <div>
-              <h3 className="font-semibold text-lg mb-4 text-blue-600">
+              <h3 className="font-semibold text-lg mb-4 text-blue-400">
                 Новые заявки ({requests.new.length})
               </h3>
               {requests.new.map((req, i) => (
@@ -170,21 +170,21 @@ export default function MasterDashboard() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-white rounded-xl shadow-lg p-6 mb-4"
+                  className="bg-gray-900 rounded-xl shadow-lg p-6 mb-4 border border-gray-800"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-semibold text-lg">{req.product}</h4>
-                      <p className="text-gray-600">Клиент: {req.client}</p>
-                      <p className="text-gray-600">Телефон: {req.phone}</p>
-                      <p className="text-gray-600">Авто: {req.car}</p>
-                      <p className="text-gray-600">Дата: {req.date} в {req.time}</p>
+                      <h4 className="font-semibold text-lg text-white">{req.product}</h4>
+                      <p className="text-gray-400">Клиент: {req.client}</p>
+                      <p className="text-gray-400">Телефон: {req.phone}</p>
+                      <p className="text-gray-400">Авто: {req.car}</p>
+                      <p className="text-gray-400">Дата: {req.date} в {req.time}</p>
                     </div>
                     <div className="flex gap-2">
-                      <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                      <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
                         Принять
                       </button>
-                      <button className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                      <button className="bg-gray-700 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">
                         Отклонить
                       </button>
                     </div>
@@ -195,7 +195,7 @@ export default function MasterDashboard() {
             
             {/* Принятые заявки */}
             <div>
-              <h3 className="font-semibold text-lg mb-4 text-yellow-600">
+              <h3 className="font-semibold text-lg mb-4 text-yellow-400">
                 Принятые заявки ({requests.accepted.length})
               </h3>
               {requests.accepted.map((req, i) => (
@@ -203,17 +203,17 @@ export default function MasterDashboard() {
                   key={req.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-white rounded-xl shadow-lg p-6 mb-4"
+                  className="bg-gray-900 rounded-xl shadow-lg p-6 mb-4 border border-gray-800"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-semibold text-lg">{req.product}</h4>
-                      <p className="text-gray-600">Клиент: {req.client}</p>
-                      <p className="text-gray-600">Телефон: {req.phone}</p>
-                      <p className="text-gray-600">Авто: {req.car}</p>
-                      <p className="text-gray-600">Дата: {req.date} в {req.time}</p>
+                      <h4 className="font-semibold text-lg text-white">{req.product}</h4>
+                      <p className="text-gray-400">Клиент: {req.client}</p>
+                      <p className="text-gray-400">Телефон: {req.phone}</p>
+                      <p className="text-gray-400">Авто: {req.car}</p>
+                      <p className="text-gray-400">Дата: {req.date} в {req.time}</p>
                     </div>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                       Завершить
                     </button>
                   </div>
@@ -224,20 +224,20 @@ export default function MasterDashboard() {
         )}
         
         {activeTab === 'schedule' && (
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-semibold mb-6">Расписание на неделю</h2>
+          <div className="bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-800">
+            <h2 className="text-2xl font-semibold mb-6 text-white">Расписание на неделю</h2>
             <div className="grid grid-cols-7 gap-4">
               {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day, i) => (
                 <div key={i} className="text-center">
-                  <p className="font-medium mb-2">{day}</p>
+                  <p className="font-medium mb-2 text-gray-400">{day}</p>
                   <div className="space-y-2">
                     {i < 3 && (
-                      <div className="bg-purple-100 p-2 rounded text-xs">
+                      <div className="bg-purple-900/20 border border-purple-800 p-2 rounded text-xs text-purple-400">
                         10:00 - DX-91
                       </div>
                     )}
                     {i === 2 && (
-                      <div className="bg-purple-100 p-2 rounded text-xs">
+                      <div className="bg-purple-900/20 border border-purple-800 p-2 rounded text-xs text-purple-400">
                         14:00 - DX-4GS
                       </div>
                     )}
@@ -249,24 +249,24 @@ export default function MasterDashboard() {
         )}
         
         {activeTab === 'profile' && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 max-w-2xl">
-            <h2 className="text-2xl font-semibold mb-6">Мой профиль</h2>
+          <div className="bg-gray-900 rounded-2xl shadow-lg p-8 max-w-2xl border border-gray-800">
+            <h2 className="text-2xl font-semibold mb-6 text-white">Мой профиль</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Имя</label>
-                <input type="text" value="Алексей Кириллов" className="w-full px-4 py-3 border rounded-xl" />
+                <label className="block text-sm font-medium mb-1 text-gray-400">Имя</label>
+                <input type="text" value="Алексей Кириллов" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Телефон</label>
-                <input type="tel" value="+998 90 123 45 67" className="w-full px-4 py-3 border rounded-xl" disabled />
+                <label className="block text-sm font-medium mb-1 text-gray-400">Телефон</label>
+                <input type="tel" value="+998 90 123 45 67" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-gray-500" disabled />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Опыт работы</label>
-                <input type="text" value="8 лет" className="w-full px-4 py-3 border rounded-xl" />
+                <label className="block text-sm font-medium mb-1 text-gray-400">Опыт работы</label>
+                <input type="text" value="8 лет" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Специализация</label>
-                <input type="text" value="Премиум системы, GSM модули" className="w-full px-4 py-3 border rounded-xl" />
+                <label className="block text-sm font-medium mb-1 text-gray-400">Специализация</label>
+                <input type="text" value="Премиум системы, GSM модули" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
               </div>
               <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl">
                 Сохранить изменения

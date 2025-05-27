@@ -6,7 +6,7 @@
 }
 
 body {
-  @apply bg-white text-gray-900;
+  @apply bg-black text-gray-100;
 }
 
 .page-container {
@@ -18,5 +18,5 @@ body {
 }
 
 .btn-secondary {
-  @apply bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition font-medium;
+  @apply bg-gray-800 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700 transition font-medium;
 }

@@ -1,4 +1,3 @@
-// src/components/layout/Footer.jsx
 'use client'
 
 import Link from 'next/link'
@@ -41,7 +40,7 @@ export default function Footer() {
   ]
   
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-950 text-white border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           <div className="md:col-span-2">
@@ -62,7 +61,7 @@ export default function Footer() {
                   target="_blank"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition"
+                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition"
                 >
                   <span className="text-xl">{social.icon}</span>
                 </motion.a>
@@ -75,7 +74,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.products.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition">
+                  <Link href={link.href} className="text-gray-400 hover:text-purple-400 transition">
                     {link.label}
                   </Link>
                 </li>
@@ -88,7 +87,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.service.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition">
+                  <Link href={link.href} className="text-gray-400 hover:text-purple-400 transition">
                     {link.label}
                   </Link>
                 </li>
@@ -101,7 +100,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition">
+                  <Link href={link.href} className="text-gray-400 hover:text-purple-400 transition">
                     {link.label}
                   </Link>
                 </li>
@@ -116,10 +115,10 @@ export default function Footer() {
               © {currentYear} Pandora Uzbekistan. Все права защищены.
             </p>
             <div className="flex items-center space-x-6">
-              <a href="tel:+998901234567" className="text-gray-400 hover:text-white transition">
+              <a href="tel:+998901234567" className="text-gray-400 hover:text-purple-400 transition">
                 📞 +998 90 123 45 67
               </a>
-              <a href="mailto:info@pandora.uz" className="text-gray-400 hover:text-white transition">
+              <a href="mailto:info@pandora.uz" className="text-gray-400 hover:text-purple-400 transition">
                 ✉️ info@pandora.uz
               </a>
             </div>
@@ -142,7 +141,7 @@ export default function Footer() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition"
+          className="w-14 h-14 bg-gray-800 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition"
         >
           <span className="text-2xl">⬆️</span>
         </motion.button>

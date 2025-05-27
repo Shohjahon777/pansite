@@ -1,4 +1,3 @@
-// src/app/products/[id]/page.jsx
 'use client'
 
 import { useState } from 'react'
@@ -119,15 +118,15 @@ export default function ProductDetailPage() {
   const product = products[params.id] || products['dx91']
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Хлебные крошки */}
-        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
-          <Link href="/" className="hover:text-purple-600">Главная</Link>
+        <div className="flex items-center space-x-2 text-sm text-gray-400 mb-6">
+          <Link href="/" className="hover:text-purple-400">Главная</Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-purple-600">Продукты</Link>
+          <Link href="/products" className="hover:text-purple-400">Продукты</Link>
           <span>/</span>
-          <span className="text-gray-900">{product.name}</span>
+          <span className="text-gray-300">{product.name}</span>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -147,7 +146,7 @@ export default function ProductDetailPage() {
             </div>
             <div className="flex gap-4 mt-4">
               {product.images.map((img, i) => (
-                <div key={i} className="bg-gray-100 rounded-xl p-4 text-4xl">
+                <div key={i} className="bg-gray-800 rounded-xl p-4 text-4xl border border-gray-700">
                   {img}
                 </div>
               ))}
@@ -159,30 +158,30 @@ export default function ProductDetailPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
+            <h1 className="text-4xl font-bold mb-4 text-white">{product.name}</h1>
             <div className="flex items-center space-x-4 mb-6">
               <div className="flex text-yellow-400">
                 {'★'.repeat(Math.floor(product.rating))}
               </div>
-              <span>{product.rating} ({product.reviewsCount} отзывов)</span>
+              <span className="text-gray-300">{product.rating} ({product.reviewsCount} отзывов)</span>
             </div>
             
-            <p className="text-gray-600 mb-8">{product.description}</p>
+            <p className="text-gray-400 mb-8">{product.description}</p>
             
-            <div className="bg-white rounded-2xl p-6 mb-6">
-              <div className="text-4xl font-bold text-purple-600 mb-2">${product.price}</div>
-              <p className="text-gray-600 mb-4">или от ${Math.round(product.price/12)}/мес в рассрочку</p>
+            <div className="bg-gray-900 rounded-2xl p-6 mb-6 border border-gray-800">
+              <div className="text-4xl font-bold text-purple-400 mb-2">${product.price}</div>
+              <p className="text-gray-500 mb-4">или от ${Math.round(product.price/12)}/мес в рассрочку</p>
               <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl mb-2">
                 Заказать установку
               </button>
-              <Link href="/service" className="block w-full text-center border-2 border-purple-600 text-purple-600 py-3 rounded-xl">
+              <Link href="/service" className="block w-full text-center border-2 border-purple-600 text-purple-400 py-3 rounded-xl">
                 Найти мастера
               </Link>
             </div>
             
-            <div className="bg-purple-50 rounded-2xl p-6">
-              <h3 className="font-semibold mb-3">В комплекте:</h3>
-              <ul className="space-y-2 text-sm">
+            <div className="bg-purple-900/20 rounded-2xl p-6 border border-purple-800">
+              <h3 className="font-semibold mb-3 text-white">В комплекте:</h3>
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li>• Центральный блок</li>
                 <li>• LCD брелок управления</li>
                 <li>• Дополнительный брелок</li>
@@ -195,15 +194,15 @@ export default function ProductDetailPage() {
         
         {/* Табы с информацией */}
         <div className="mt-12">
-          <div className="flex space-x-8 border-b">
+          <div className="flex space-x-8 border-b border-gray-800">
             {['features', 'compatibility', 'reviews'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`pb-4 px-2 border-b-2 transition ${
                   activeTab === tab
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-600'
+                    ? 'border-purple-600 text-purple-400'
+                    : 'border-transparent text-gray-500'
                 }`}
               >
                 {tab === 'features' && 'Характеристики'}
@@ -217,23 +216,23 @@ export default function ProductDetailPage() {
             {activeTab === 'features' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="font-semibold text-lg mb-4">Основные функции</h3>
+                  <h3 className="font-semibold text-lg mb-4 text-white">Основные функции</h3>
                   <ul className="space-y-3">
                     {product.features.main.map((feature, i) => (
-                      <li key={i} className="flex items-start">
-                        <span className="text-purple-600 mr-2">✓</span>
+                      <li key={i} className="flex items-start text-gray-300">
+                        <span className="text-purple-400 mr-2">✓</span>
                         {feature}
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-4">Технические характеристики</h3>
+                  <h3 className="font-semibold text-lg mb-4 text-white">Технические характеристики</h3>
                   <dl className="space-y-3">
                     {Object.entries(product.features.technical).map(([key, value]) => (
                       <div key={key} className="flex justify-between">
-                        <dt className="text-gray-600">{key}:</dt>
-                        <dd className="font-medium">{value}</dd>
+                        <dt className="text-gray-500">{key}:</dt>
+                        <dd className="font-medium text-gray-300">{value}</dd>
                       </div>
                     ))}
                   </dl>
@@ -243,20 +242,20 @@ export default function ProductDetailPage() {
             
             {activeTab === 'compatibility' && (
               <div>
-                <h3 className="font-semibold text-lg mb-4">Поддерживаемые автомобили</h3>
+                <h3 className="font-semibold text-lg mb-4 text-white">Поддерживаемые автомобили</h3>
                 <ul className="space-y-2">
                   {product.compatibility.map((item, i) => (
-                    <li key={i} className="flex items-center">
-                      <span className="text-green-600 mr-2">✓</span>
+                    <li key={i} className="flex items-center text-gray-300">
+                      <span className="text-green-400 mr-2">✓</span>
                       {item}
                     </li>
                   ))}
                 </ul>
-                <div className="mt-6 p-4 bg-blue-50 rounded-xl">
-                  <p className="text-sm">
+                <div className="mt-6 p-4 bg-blue-900/20 rounded-xl border border-blue-800">
+                  <p className="text-sm text-gray-300">
                     Не нашли свой автомобиль? Позвоните нам, и мы проверим совместимость!
                   </p>
-                  <a href="tel:+998901234567" className="text-purple-600 font-medium">
+                  <a href="tel:+998901234567" className="text-purple-400 font-medium">
                     +998 90 123 45 67
                   </a>
                 </div>
@@ -271,21 +270,21 @@ export default function ProductDetailPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="bg-white rounded-2xl p-6"
+                    className="bg-gray-900 rounded-2xl p-6 border border-gray-800"
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h4 className="font-semibold">{review.user}</h4>
+                        <h4 className="font-semibold text-white">{review.user}</h4>
                         <div className="flex text-yellow-400 text-sm">
                           {'★'.repeat(review.rating)}
                         </div>
                       </div>
                       <span className="text-sm text-gray-500">{review.date}</span>
                     </div>
-                    <p className="text-gray-600">{review.text}</p>
+                    <p className="text-gray-400">{review.text}</p>
                   </motion.div>
                 ))}
-                <button className="w-full py-3 border-2 border-gray-300 rounded-xl text-gray-600">
+                <button className="w-full py-3 border-2 border-gray-700 rounded-xl text-gray-500">
                   Показать все отзывы
                 </button>
               </div>

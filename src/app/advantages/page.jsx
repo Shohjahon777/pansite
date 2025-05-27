@@ -1,8 +1,8 @@
-// src/app/advantages/page.jsx
 'use client'
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+
 export default function AdvantagesPage() {
   const technologies = [
     {
@@ -74,12 +74,12 @@ export default function AdvantagesPage() {
   ]
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl font-bold text-center mb-4"
+          className="text-5xl font-bold text-center mb-4 text-white"
         >
           Технологии Pandora
         </motion.h1>
@@ -87,7 +87,7 @@ export default function AdvantagesPage() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center text-gray-600 mb-12 text-lg"
+          className="text-center text-gray-400 mb-12 text-lg"
         >
           Инновационные решения для защиты вашего автомобиля
         </motion.p>
@@ -100,7 +100,7 @@ export default function AdvantagesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -5 }}
-              className="bg-white rounded-3xl shadow-xl p-8 group"
+              className="bg-gray-900 rounded-3xl shadow-xl p-8 group border border-gray-800 hover:border-purple-600 transition"
             >
               <motion.div
                 className="text-6xl mb-4 inline-block"
@@ -109,13 +109,13 @@ export default function AdvantagesPage() {
               >
                 {tech.icon}
               </motion.div>
-              <h3 className="text-2xl font-bold mb-3">{tech.title}</h3>
-              <p className="text-gray-600 mb-6">{tech.description}</p>
+              <h3 className="text-2xl font-bold mb-3 text-white">{tech.title}</h3>
+              <p className="text-gray-400 mb-6">{tech.description}</p>
               <ul className="space-y-2">
                 {tech.details.map((detail, j) => (
                   <li key={j} className="flex items-start text-sm">
-                    <span className="text-purple-600 mr-2 mt-0.5">•</span>
-                    <span className="text-gray-700">{detail}</span>
+                    <span className="text-purple-400 mr-2 mt-0.5">•</span>
+                    <span className="text-gray-300">{detail}</span>
                   </li>
                 ))}
               </ul>
@@ -125,8 +125,8 @@ export default function AdvantagesPage() {
         
         {/* Сравнение с конкурентами */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8">Почему именно Pandora?</h2>
-          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+          <h2 className="text-3xl font-bold text-center mb-8 text-white">Почему именно Pandora?</h2>
+          <div className="bg-gray-900 rounded-3xl shadow-xl overflow-hidden border border-gray-800">
             <table className="w-full">
               <thead className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
                 <tr>
@@ -144,9 +144,9 @@ export default function AdvantagesPage() {
                   ['Гарантия', '2 года', '1 год'],
                   ['Поддержка 24/7', '✓', '✗']
                 ].map(([feature, pandora, others], i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-gray-50' : ''}>
-                    <td className="px-6 py-4 font-medium">{feature}</td>
-                    <td className="px-6 py-4 text-center text-green-600 font-semibold">{pandora}</td>
+                  <tr key={i} className={i % 2 === 0 ? 'bg-gray-800' : ''}>
+                    <td className="px-6 py-4 font-medium text-gray-300">{feature}</td>
+                    <td className="px-6 py-4 text-center text-green-400 font-semibold">{pandora}</td>
                     <td className="px-6 py-4 text-center text-gray-500">{others}</td>
                   </tr>
                 ))}

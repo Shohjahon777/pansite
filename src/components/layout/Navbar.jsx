@@ -1,4 +1,3 @@
-// src/components/layout/Navbar.jsx
 'use client'
 
 import Link from 'next/link'
@@ -27,8 +26,8 @@ export default function Header() {
   ]
   
   const isHomePage = pathname === '/'
-  const headerBg = isScrolled || !isHomePage ? 'bg-white shadow-lg' : 'bg-transparent'
-  const textColor = isScrolled || !isHomePage ? 'text-gray-900' : 'text-white'
+  const headerBg = isScrolled || !isHomePage ? 'bg-gray-900/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+  const textColor = isScrolled || !isHomePage ? 'text-gray-100' : 'text-white'
   
   return (
     <motion.header
@@ -59,7 +58,7 @@ export default function Header() {
                 href={item.href}
                 className={`relative font-medium transition ${
                   isScrolled || !isHomePage
-                    ? 'text-gray-700 hover:text-purple-600' 
+                    ? 'text-gray-300 hover:text-purple-400' 
                     : 'text-white hover:text-white/80'
                 }`}
               >
@@ -101,14 +100,14 @@ export default function Header() {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:hidden bg-white rounded-2xl shadow-lg mt-2 p-4"
+            className="md:hidden bg-gray-900 rounded-2xl shadow-lg mt-2 p-4"
           >
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
-                className="block py-2 text-gray-700 hover:text-purple-600"
+                className="block py-2 text-gray-300 hover:text-purple-400"
               >
                 {item.label}
               </Link>

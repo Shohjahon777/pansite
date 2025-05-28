@@ -2,9 +2,24 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { 
+  FileText, 
+  Calendar, 
+  User, 
+  LogOut,
+  Phone,
+  Car,
+  Clock,
+  TrendingUp,
+  DollarSign,
+  Star
+} from 'lucide-react'
+import { useTranslation } from '../../../hooks/useTranslation'
+import { accountLocales } from '../accountLocales'
 
 export default function MasterDashboard() {
   const [activeTab, setActiveTab] = useState('requests')
+  const { t } = useTranslation(accountLocales)
   
   const stats = {
     today: 3,
@@ -63,106 +78,117 @@ export default function MasterDashboard() {
   }
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="page-container min-h-screen bg-black">
+      <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-white">Кабинет мастера</h1>
-          <button className="text-purple-400 hover:text-purple-300">
-            Выйти →
+          <h1 className="text-3xl font-thin text-white">{t('account.master.title')}</h1>
+          <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+            <LogOut className="w-4 h-4" />
+            <span className="text-sm">{t('account.logout')}</span>
           </button>
         </div>
         
-        {/* Статистика */}
+        {/* Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
+            className="bg-gray-950 border border-gray-800 p-4 text-center"
           >
-            <p className="text-3xl font-bold text-purple-400">{stats.today}</p>
-            <p className="text-gray-400">Сегодня</p>
-            <p className="text-sm text-green-400">+${stats.income.today}</p>
+            <p className="text-3xl font-thin text-white">{stats.today}</p>
+            <p className="text-gray-500 text-sm">{t('account.master.stats.today')}</p>
+            <p className="text-sm text-green-500 mt-1">+${stats.income.today}</p>
           </motion.div>
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
+            className="bg-gray-950 border border-gray-800 p-4 text-center"
           >
-            <p className="text-3xl font-bold text-purple-400">{stats.week}</p>
-            <p className="text-gray-400">За неделю</p>
-            <p className="text-sm text-green-400">+${stats.income.week}</p>
+            <p className="text-3xl font-thin text-white">{stats.week}</p>
+            <p className="text-gray-500 text-sm">{t('account.master.stats.week')}</p>
+            <p className="text-sm text-green-500 mt-1">+${stats.income.week}</p>
           </motion.div>
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
+            className="bg-gray-950 border border-gray-800 p-4 text-center"
           >
-            <p className="text-3xl font-bold text-purple-400">{stats.month}</p>
-            <p className="text-gray-400">За месяц</p>
-            <p className="text-sm text-green-400">+${stats.income.month}</p>
+            <p className="text-3xl font-thin text-white">{stats.month}</p>
+            <p className="text-gray-500 text-sm">{t('account.master.stats.month')}</p>
+            <p className="text-sm text-green-500 mt-1">+${stats.income.month}</p>
           </motion.div>
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
+            className="bg-gray-950 border border-gray-800 p-4 text-center"
           >
-            <p className="text-3xl font-bold text-purple-400">{stats.total}</p>
-            <p className="text-gray-400">Всего</p>
+            <p className="text-3xl font-thin text-white">{stats.total}</p>
+            <p className="text-gray-500 text-sm">{t('account.master.stats.total')}</p>
           </motion.div>
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-gray-900 p-4 rounded-xl shadow text-center border border-gray-800"
+            className="bg-gray-950 border border-gray-800 p-4 text-center"
           >
-            <p className="text-3xl font-bold text-yellow-400">⭐ {stats.rating}</p>
-            <p className="text-gray-400">Рейтинг</p>
+            <div className="flex items-center justify-center gap-1">
+              <Star className="w-5 h-5 fill-white text-white" />
+              <p className="text-3xl font-thin text-white">{stats.rating}</p>
+            </div>
+            <p className="text-gray-500 text-sm">{t('account.master.stats.rating')}</p>
           </motion.div>
         </div>
         
-        {/* Табы */}
+        {/* Tabs */}
         <div className="flex gap-4 mb-8">
           <button
             onClick={() => setActiveTab('requests')}
-            className={`px-6 py-2 rounded-lg transition ${
+            className={`flex items-center gap-2 px-6 py-3 transition-all ${
               activeTab === 'requests'
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-800 text-gray-400 border border-gray-700'
+                ? 'bg-white text-black'
+                : 'border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700'
             }`}
           >
-            Заявки
+            <FileText className="w-4 h-4" />
+            <span className="font-light">{t('account.master.tabs.requests')}</span>
           </button>
           <button
             onClick={() => setActiveTab('schedule')}
-            className={`px-6 py-2 rounded-lg transition ${
+            className={`flex items-center gap-2 px-6 py-3 transition-all ${
               activeTab === 'schedule'
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-800 text-gray-400 border border-gray-700'
+                ? 'bg-white text-black'
+                : 'border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700'
             }`}
           >
-            Расписание
+            <Calendar className="w-4 h-4" />
+            <span className="font-light">{t('account.master.tabs.schedule')}</span>
           </button>
           <button
             onClick={() => setActiveTab('profile')}
-            className={`px-6 py-2 rounded-lg transition ${
+            className={`flex items-center gap-2 px-6 py-3 transition-all ${
               activeTab === 'profile'
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-800 text-gray-400 border border-gray-700'
+                ? 'bg-white text-black'
+                : 'border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700'
             }`}
           >
-            Профиль
+            <User className="w-4 h-4" />
+            <span className="font-light">{t('account.master.tabs.profile')}</span>
           </button>
         </div>
         
         {activeTab === 'requests' && (
           <div className="space-y-6">
-            {/* Новые заявки */}
+            {/* New Requests */}
             <div>
-              <h3 className="font-semibold text-lg mb-4 text-blue-400">
-                Новые заявки ({requests.new.length})
+              <h3 className="font-light text-lg mb-4 text-blue-400">
+                {t('account.master.newRequests')} ({requests.new.length})
               </h3>
               {requests.new.map((req, i) => (
                 <motion.div
@@ -170,22 +196,36 @@ export default function MasterDashboard() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-gray-900 rounded-xl shadow-lg p-6 mb-4 border border-gray-800"
+                  className="bg-gray-950 border border-gray-800 p-6 mb-4"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-semibold text-lg text-white">{req.product}</h4>
-                      <p className="text-gray-400">Клиент: {req.client}</p>
-                      <p className="text-gray-400">Телефон: {req.phone}</p>
-                      <p className="text-gray-400">Авто: {req.car}</p>
-                      <p className="text-gray-400">Дата: {req.date} в {req.time}</p>
+                      <h4 className="font-light text-lg text-white mb-2">{req.product}</h4>
+                      <div className="space-y-1 text-sm">
+                        <p className="text-gray-400 flex items-center gap-2">
+                          <User className="w-4 h-4 text-gray-600" />
+                          {t('account.master.client')}: {req.client}
+                        </p>
+                        <p className="text-gray-400 flex items-center gap-2">
+                          <Phone className="w-4 h-4 text-gray-600" />
+                          {t('account.master.phone')}: {req.phone}
+                        </p>
+                        <p className="text-gray-400 flex items-center gap-2">
+                          <Car className="w-4 h-4 text-gray-600" />
+                          {t('account.master.car')}: {req.car}
+                        </p>
+                        <p className="text-gray-400 flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-gray-600" />
+                          {t('account.master.date')}: {req.date} в {req.time}
+                        </p>
+                      </div>
                     </div>
                     <div className="flex gap-2">
-                      <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                        Принять
+                      <button className="bg-white text-black px-4 py-2 hover:bg-gray-100 transition-colors">
+                        {t('account.master.accept')}
                       </button>
-                      <button className="bg-gray-700 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">
-                        Отклонить
+                      <button className="border border-gray-700 text-gray-300 px-4 py-2 hover:bg-gray-900 transition-all">
+                        {t('account.master.decline')}
                       </button>
                     </div>
                   </div>
@@ -193,28 +233,30 @@ export default function MasterDashboard() {
               ))}
             </div>
             
-            {/* Принятые заявки */}
+            {/* Accepted Requests */}
             <div>
-              <h3 className="font-semibold text-lg mb-4 text-yellow-400">
-                Принятые заявки ({requests.accepted.length})
+              <h3 className="font-light text-lg mb-4 text-yellow-400">
+                {t('account.master.acceptedRequests')} ({requests.accepted.length})
               </h3>
               {requests.accepted.map((req, i) => (
                 <motion.div
                   key={req.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-gray-900 rounded-xl shadow-lg p-6 mb-4 border border-gray-800"
+                  className="bg-gray-950 border border-gray-800 p-6 mb-4"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-semibold text-lg text-white">{req.product}</h4>
-                      <p className="text-gray-400">Клиент: {req.client}</p>
-                      <p className="text-gray-400">Телефон: {req.phone}</p>
-                      <p className="text-gray-400">Авто: {req.car}</p>
-                      <p className="text-gray-400">Дата: {req.date} в {req.time}</p>
+                      <h4 className="font-light text-lg text-white mb-2">{req.product}</h4>
+                      <div className="space-y-1 text-sm">
+                        <p className="text-gray-400">{t('account.master.client')}: {req.client}</p>
+                        <p className="text-gray-400">{t('account.master.phone')}: {req.phone}</p>
+                        <p className="text-gray-400">{t('account.master.car')}: {req.car}</p>
+                        <p className="text-gray-400">{t('account.master.date')}: {req.date} в {req.time}</p>
+                      </div>
                     </div>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                      Завершить
+                    <button className="bg-green-900 text-green-400 px-4 py-2 hover:bg-green-800 transition-colors">
+                      {t('account.master.complete')}
                     </button>
                   </div>
                 </motion.div>
@@ -224,20 +266,20 @@ export default function MasterDashboard() {
         )}
         
         {activeTab === 'schedule' && (
-          <div className="bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-800">
-            <h2 className="text-2xl font-semibold mb-6 text-white">Расписание на неделю</h2>
+          <div className="bg-gray-950 border border-gray-800 p-8">
+            <h2 className="text-2xl font-thin mb-6 text-white">{t('account.master.weekSchedule')}</h2>
             <div className="grid grid-cols-7 gap-4">
               {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day, i) => (
                 <div key={i} className="text-center">
-                  <p className="font-medium mb-2 text-gray-400">{day}</p>
+                  <p className="font-light mb-3 text-gray-400">{day}</p>
                   <div className="space-y-2">
                     {i < 3 && (
-                      <div className="bg-purple-900/20 border border-purple-800 p-2 rounded text-xs text-purple-400">
+                      <div className="bg-gray-900 border border-gray-800 p-2 text-xs text-gray-300">
                         10:00 - DX-91
                       </div>
                     )}
                     {i === 2 && (
-                      <div className="bg-purple-900/20 border border-purple-800 p-2 rounded text-xs text-purple-400">
+                      <div className="bg-gray-900 border border-gray-800 p-2 text-xs text-gray-300">
                         14:00 - DX-4GS
                       </div>
                     )}
@@ -249,27 +291,52 @@ export default function MasterDashboard() {
         )}
         
         {activeTab === 'profile' && (
-          <div className="bg-gray-900 rounded-2xl shadow-lg p-8 max-w-2xl border border-gray-800">
-            <h2 className="text-2xl font-semibold mb-6 text-white">Мой профиль</h2>
+          <div className="bg-gray-950 border border-gray-800 p-8 max-w-2xl">
+            <h2 className="text-2xl font-thin mb-6 text-white">{t('account.master.profile.title')}</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-400">Имя</label>
-                <input type="text" value="Алексей Кириллов" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
+                <label className="block text-sm font-light mb-2 text-gray-400">
+                  {t('account.master.profile.name')}
+                </label>
+                <input 
+                  type="text" 
+                  value="Алексей Кириллов" 
+                  className="w-full px-4 py-3 bg-black border border-gray-800 text-white focus:border-gray-700 focus:outline-none" 
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-400">Телефон</label>
-                <input type="tel" value="+998 90 123 45 67" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-gray-500" disabled />
+                <label className="block text-sm font-light mb-2 text-gray-400">
+                  {t('account.master.profile.phone')}
+                </label>
+                <input 
+                  type="tel" 
+                  value="+998 90 123 45 67" 
+                  className="w-full px-4 py-3 bg-black border border-gray-800 text-gray-500" 
+                  disabled 
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-400">Опыт работы</label>
-                <input type="text" value="8 лет" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
+                <label className="block text-sm font-light mb-2 text-gray-400">
+                  {t('account.master.profile.experience')}
+                </label>
+                <input 
+                  type="text" 
+                  value="8 лет" 
+                  className="w-full px-4 py-3 bg-black border border-gray-800 text-white focus:border-gray-700 focus:outline-none" 
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-400">Специализация</label>
-                <input type="text" value="Премиум системы, GSM модули" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white" />
+                <label className="block text-sm font-light mb-2 text-gray-400">
+                  {t('account.master.profile.specialization')}
+                </label>
+                <input 
+                  type="text" 
+                  value="Премиум системы, GSM модули" 
+                  className="w-full px-4 py-3 bg-black border border-gray-800 text-white focus:border-gray-700 focus:outline-none" 
+                />
               </div>
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl">
-                Сохранить изменения
+              <button className="bg-white text-black px-8 py-3 hover:bg-gray-100 transition-colors font-medium">
+                {t('account.master.profile.save')}
               </button>
             </div>
           </div>

@@ -1,36 +1,61 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import {
+  Shield,
+  Smartphone,
+  Thermometer,
+  Battery,
+  Bell,
+  Award,
+  Package,
+  Search,
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  ArrowRight,
+  Zap,
+  Lock,
+  Cpu
+} from 'lucide-react'
+import { useTranslation } from '../hooks/useTranslation'
+import { homeLocales } from './home'
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const { scrollY } = useScroll()
+  const { t } = useTranslation(homeLocales)
+
+  const y = useTransform(scrollY, [0, 300], [0, 50])
+  const opacity = useTransform(scrollY, [0, 300], [1, 0.8])
 
   const slides = [
     {
-      title: 'Pandora DXL-5000',
-      subtitle: 'Премиальная защита',
-      description: 'Bluetooth 5.0, умная авторизация, интеграция с CAN',
-      price: 'от $550',
-      image: '🔐',
-      gradient: 'from-purple-600 to-pink-600'
+      title: t('hero.slide1.title'),
+      subtitle: t('hero.slide1.subtitle'),
+      description: t('hero.slide1.description'),
+      price: t('hero.slide1.price'),
+      icon: Lock,
+      gradient: 'from-gray-900 via-gray-800 to-black'
     },
     {
-      title: 'Pandora DX-4GS',
-      subtitle: 'Управление со смартфона',
-      description: 'GSM модуль, GPS трекинг, мобильное приложение',
-      price: 'от $350',
-      image: '📱',
-      gradient: 'from-blue-600 to-purple-600'
+      title: t('hero.slide2.title'),
+      subtitle: t('hero.slide2.subtitle'),
+      description: t('hero.slide2.description'),
+      price: t('hero.slide2.price'),
+      icon: Smartphone,
+      gradient: 'from-gray-800 via-gray-900 to-black'
     },
     {
-      title: 'Установка за 2 часа',
-      subtitle: '50+ мастеров по всей стране',
-      description: 'Официальная гарантия 2 года, сертифицированные специалисты',
-      price: 'Бесплатная диагностика',
-      image: '👨‍🔧',
-      gradient: 'from-green-600 to-blue-600'
+      title: t('hero.slide3.title'),
+      subtitle: t('hero.slide3.subtitle'),
+      description: t('hero.slide3.description'),
+      price: t('hero.slide3.price'),
+      icon: Zap,
+      gradient: 'from-black via-gray-900 to-gray-800'
     }
   ]
 
@@ -39,44 +64,49 @@ export default function HomePage() {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
     return () => clearInterval(timer)
-  }, [])
+  }, [slides.length])
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length)
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
 
   const advantages = [
-    { icon: '🛡️', title: 'Диалоговый код', desc: 'Защита от перехвата сигнала' },
-    { icon: '📱', title: 'Управление 24/7', desc: 'Из любой точки мира' },
-    { icon: '🌡️', title: 'Автозапуск', desc: 'По температуре и времени' },
-    { icon: '🔋', title: 'Автономность', desc: 'До 60 дней без подзарядки' },
-    { icon: '🚨', title: 'Мгновенные уведомления', desc: 'SMS и push-уведомления' },
-    { icon: '🏆', title: 'Гарантия 2 года', desc: 'Официальное обслуживание' }
+    { icon: Shield, title: t('advantages.items.dialogCode.title'), desc: t('advantages.items.dialogCode.desc') },
+    { icon: Smartphone, title: t('advantages.items.control.title'), desc: t('advantages.items.control.desc') },
+    { icon: Thermometer, title: t('advantages.items.autostart.title'), desc: t('advantages.items.autostart.desc') },
+    { icon: Battery, title: t('advantages.items.battery.title'), desc: t('advantages.items.battery.desc') },
+    { icon: Bell, title: t('advantages.items.notifications.title'), desc: t('advantages.items.notifications.desc') },
+    { icon: Award, title: t('advantages.items.warranty.title'), desc: t('advantages.items.warranty.desc') }
   ]
 
   const quickActions = [
     {
-      icon: '📦',
-      title: 'Каталог',
-      desc: '3 линейки охранных систем',
-      href: '/products',
-      color: 'from-purple-500 to-pink-500'
+      icon: Package,
+      title: t('quickActions.catalog.title'),
+      desc: t('quickActions.catalog.desc'),
+      href: '/products'
     },
     {
-      icon: '🔍',
-      title: 'Найти мастера',
-      desc: 'Рядом с вами',
-      href: '/service',
-      color: 'from-blue-500 to-purple-500'
+      icon: Search,
+      title: t('quickActions.findMaster.title'),
+      desc: t('quickActions.findMaster.desc'),
+      href: '/service'
     },
     {
-      icon: '✅',
-      title: 'Проверить гарантию',
-      desc: 'По серийному номеру',
-      href: '/account',
-      color: 'from-green-500 to-blue-500'
+      icon: CheckCircle,
+      title: t('quickActions.checkWarranty.title'),
+      desc: t('quickActions.checkWarranty.desc'),
+      href: '/account'
     }
   ]
 
+  const stats = [
+    { value: '15,000+', label: t('stats.installations') },
+    { value: '98%', label: t('stats.clients') },
+    { value: '50+', label: t('stats.masters') },
+    { value: '12', label: t('stats.experience') }
+  ]
+
+  // Инициализация карты
   useEffect(() => {
     const script = document.createElement('script')
     script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU'
@@ -117,203 +147,263 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div>
-      {/* Промо-слайдер */}
-      <section className="relative h-screen bg-black overflow-hidden">
-        <div className={`absolute inset-0 bg-gradient-to-br ${slides[currentSlide].gradient} transition-all duration-700`}>
-          <div className="h-full flex items-center justify-center">
-            <div className="max-w-7xl mx-auto px-4 text-center text-white">
+    <div className="bg-black">
+      {/* Hero Section */}
+      <section className="relative min-h-screen overflow-hidden">
+        <motion.div style={{ y, opacity }} className="absolute inset-0">
+          <div className={`absolute inset-0 bg-gradient-to-br ${slides[currentSlide].gradient} transition-all duration-1000`} />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+        </motion.div>
+
+        <div className="relative z-10 min-h-screen flex items-center">
+          <div className="max-w-7xl mx-auto px-4 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <motion.div
                 key={currentSlide}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                className="text-8xl mb-6"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7 }}
               >
-                {slides[currentSlide].image}
-              </motion.div>
-              <motion.h1
-                key={`title-${currentSlide}`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-5xl md:text-7xl font-bold mb-4"
-              >
-                {slides[currentSlide].title}
-              </motion.h1>
-              <motion.p
-                key={`subtitle-${currentSlide}`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-2xl mb-2"
-              >
-                {slides[currentSlide].subtitle}
-              </motion.p>
-              <motion.p
-                key={`desc-${currentSlide}`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-xl opacity-90 mb-6"
-              >
-                {slides[currentSlide].description}
-              </motion.p>
-              <motion.div
-                key={`price-${currentSlide}`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="text-3xl font-bold mb-8"
-              >
-                {slides[currentSlide].price}
-              </motion.div>
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-              >
-                <Link href="/products" className="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition inline-block">
-                  Узнать подробнее
+                <h1 className="text-5xl lg:text-7xl font-thin text-white mb-6 leading-tight">
+                  {slides[currentSlide].title}
+                </h1>
+                <p className="text-2xl lg:text-3xl text-gray-300 font-light mb-4">
+                  {slides[currentSlide].subtitle}
+                </p>
+                <p className="text-lg text-gray-400 mb-8 font-light">
+                  {slides[currentSlide].description}
+                </p>
+                <div className="text-3xl text-white mb-10 font-light">
+                  {slides[currentSlide].price}
+                </div>
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 hover:bg-gray-100 transition-all group"
+                >
+                  <span className="font-medium">{t('hero.cta')}</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
+              </motion.div>
+
+              <motion.div
+                key={`icon-${currentSlide}`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7 }}
+                className="hidden lg:flex justify-center items-center"
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 bg-white/5 blur-3xl" />
+                  {/* <slides[currentSlide].icon className="w-64 h-64 text-white/10" strokeWidth={0.5} /> */}
+                </div>
               </motion.div>
             </div>
           </div>
         </div>
 
-        {/* Кнопки навигации */}
+        {/* Navigation */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition"
+          className="absolute left-8 top-1/2 -translate-y-1/2 w-12 h-12 border border-white/20 text-white/60 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center"
         >
-          ←
+          <ChevronLeft className="w-5 h-5" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition"
+          className="absolute right-8 top-1/2 -translate-y-1/2 w-12 h-12 border border-white/20 text-white/60 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center"
         >
-          →
+          <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Индикаторы */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {/* Indicators */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-3">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`h-3 rounded-full transition-all duration-300 ${currentSlide === index ? 'bg-white w-8' : 'bg-white/50 w-3'
+              className={`h-1 transition-all duration-500 ${currentSlide === index
+                  ? 'bg-white w-12'
+                  : 'bg-white/30 w-6 hover:bg-white/50'
                 }`}
             />
           ))}
         </div>
       </section>
 
-      {/* Преимущества */}
-      <section className="py-20 bg-gray-950">
+      {/* Stats Section */}
+      <section className="py-20 bg-gray-950 border-t border-gray-900">
         <div className="max-w-7xl mx-auto px-4">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-4xl font-bold text-center mb-4 text-white"
-          >
-            Преимущества Pandora
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-center text-gray-400 mb-12"
-          >
-            Почему нас выбирают более 1000 клиентов
-          </motion.p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {advantages.map((item, i) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {stats.map((stat, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-gray-900 p-6 rounded-2xl border border-gray-800 hover:border-purple-600 transition group"
+                className="text-center"
               >
-                <motion.div
-                  className="text-4xl mb-4 inline-block"
-                  animate={{ rotate: 0 }}
-                  whileHover={{ scale: 1.2, rotate: 10 }}
-                >
-                  {item.icon}
-                </motion.div>
-                <h3 className="font-semibold text-lg mb-2 group-hover:text-purple-400 transition text-white">
-                  {item.title}
-                </h3>
-                <p className="text-gray-400">{item.desc}</p>
+                <div className="text-4xl lg:text-5xl font-thin text-white mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-gray-500 uppercase tracking-wider">
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Быстрые ссылки */}
-      <section className="py-20 bg-black">
+      {/* Advantages */}
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-white">Быстрые действия</h2>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl lg:text-5xl font-thin text-white mb-4">
+              {t('advantages.title')}
+            </h2>
+            <p className="text-xl text-gray-500 font-light">
+              {t('advantages.subtitle')}
+            </p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {quickActions.map((action, i) => (
-              <Link key={i} href={action.href}>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  whileHover={{ y: -10 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="relative overflow-hidden rounded-3xl shadow-xl group cursor-pointer"
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-90`} />
-                  <div className="relative z-10 p-8 text-white text-center">
-                    <motion.div
-                      className="text-6xl mb-4 inline-block"
-                      animate={{ rotate: 0 }}
-                      whileGroupHover={{ rotate: 360 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      {action.icon}
-                    </motion.div>
-                    <h3 className="text-2xl font-bold mb-2">{action.title}</h3>
-                    <p className="opacity-90">{action.desc}</p>
-                    <div className="mt-4 inline-flex items-center space-x-2">
-                      <span>Перейти</span>
-                      <span className="group-hover:translate-x-2 transition">→</span>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {advantages.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="group"
+              >
+                <div className="bg-gray-950 border border-gray-900 p-8 hover:border-gray-800 transition-all">
+                  <item.icon className="w-12 h-12 text-gray-600 mb-6 group-hover:text-white transition-colors" strokeWidth={1} />
+                  <h3 className="text-xl font-light text-white mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-500 font-light">
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Яндекс Карта */}
-      <section className="py-20 bg-gray-950">
+      {/* Quick Actions */}
+      <section className="py-24 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4 text-white">Ближайшие точки</h2>
-          <p className="text-center text-gray-400 mb-12">Дилеры и мастера рядом с вами</p>
+          <h2 className="text-3xl lg:text-4xl font-thin text-center text-white mb-16">
+            {t('quickActions.title')}
+          </h2>
 
-          <div className="relative">
-            <div id="map" className="w-full h-[500px] rounded-3xl shadow-2xl overflow-hidden"></div>
-
-            <div className="absolute bottom-6 left-6 bg-gray-900 rounded-2xl shadow-xl p-6 border border-gray-800">
-              <h3 className="font-bold text-lg mb-2 text-white">В Узбекистане:</h3>
-              <div className="space-y-1 text-sm text-gray-300">
-                <p>• 15+ официальных дилеров</p>
-                <p>• 50+ сертифицированных мастеров</p>
-                <p>• Установка в день обращения</p>
-              </div>
-              <Link href="/service" className="mt-4 text-purple-400 font-medium inline-flex items-center hover:text-purple-300">
-                Показать всех
-                <span className="ml-2">→</span>
-              </Link>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {quickActions.map((action, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Link href={action.href} className="block group">
+                  <div className="bg-gradient-to-b from-gray-900 to-black border border-gray-800 p-10 hover:border-gray-700 transition-all">
+                    <action.icon className="w-16 h-16 text-gray-600 mb-6 group-hover:text-white transition-colors" strokeWidth={1} />
+                    <h3 className="text-2xl font-light text-white mb-3">
+                      {action.title}
+                    </h3>
+                    <p className="text-gray-500 mb-6">
+                      {action.desc}
+                    </p>
+                    <div className="flex items-center text-gray-400 group-hover:text-white transition-colors">
+                      <span className="text-sm uppercase tracking-wider">{t('hero.cta')}</span>
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="py-24 bg-black border-t border-gray-900">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-thin text-white mb-4">
+              {t('map.title')}
+            </h2>
+            <p className="text-xl text-gray-500">
+              {t('map.subtitle')}
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="bg-gray-950 border border-gray-800 overflow-hidden">
+              <div id="map" className="w-full h-[600px] bg-gray-900"></div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="absolute bottom-8 left-8 bg-black/95 backdrop-blur-md border border-gray-800 p-8 max-w-sm"
+            >
+              <h3 className="text-xl font-light text-white mb-4">
+                {t('map.subtitle')}
+              </h3>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3 text-gray-400">
+                  <MapPin className="w-4 h-4" />
+                  <span>15+ {t('map.info.dealers')}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-400">
+                  <MapPin className="w-4 h-4" />
+                  <span>50+ {t('map.info.masters')}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-400">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>{t('map.info.installation')}</span>
+                </div>
+              </div>
+              <Link
+                href="/service"
+                className="inline-flex items-center text-white hover:text-gray-300 transition-colors group"
+              >
+                <span className="text-sm uppercase tracking-wider">{t('map.showAll')}</span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-gradient-to-t from-gray-950 to-black">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          className="max-w-4xl mx-auto px-4 text-center"
+        >
+          <Cpu className="w-20 h-20 text-gray-700 mx-auto mb-8" strokeWidth={1} />
+          <h2 className="text-4xl lg:text-5xl font-thin text-white mb-6">
+            Готовы к максимальной защите?
+          </h2>
+          <p className="text-xl text-gray-400 mb-10 font-light">
+            Выберите систему и получите профессиональную установку уже сегодня
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/products" className="bg-white text-black px-8 py-4 hover:bg-gray-100 transition-colors">
+              <span className="font-medium">Выбрать систему</span>
+            </Link>
+            <Link href="/service" className="border border-gray-700 text-white px-8 py-4 hover:bg-gray-900 transition-colors">
+              <span className="font-medium">Найти мастера</span>
+            </Link>
+          </div>
+        </motion.div>
       </section>
     </div>
   )

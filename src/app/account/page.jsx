@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import ClientDashboard from './components/ClientDashboard'
 import MasterDashboard from './components/MasterDashboard'
+import { User, Wrench, Phone, Lock } from 'lucide-react'
+import { useTranslation } from '../../hooks/useTranslation'
+import { accountLocales } from './accountLocales'
 
 export default function AccountPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -11,6 +14,7 @@ export default function AccountPage() {
   const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
   const [step, setStep] = useState('phone')
+  const { t } = useTranslation(accountLocales)
   
   const handleLogin = (e) => {
     e.preventDefault()
@@ -26,109 +30,125 @@ export default function AccountPage() {
   }
   
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900 flex items-center justify-center">
+    <div className="page-container min-h-screen bg-black flex items-center justify-center">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gray-900 rounded-3xl shadow-2xl p-8 max-w-md w-full border border-gray-800"
+        className="bg-gray-950 border border-gray-800 p-8 max-w-md w-full"
       >
-        <h2 className="text-3xl font-bold text-center mb-8 text-white">Вход в кабинет</h2>
+        <h2 className="text-3xl font-thin text-center mb-8 text-white">
+          {t('account.login.title')}
+        </h2>
         
         {step === 'phone' ? (
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-400">Номер телефона</label>
-              <input
-                type="tel"
-                placeholder="+998 XX XXX XX XX"
-                required
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-600 text-white placeholder-gray-500"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-              />
+              <label className="block text-sm font-light mb-2 text-gray-400">
+                {t('account.login.phoneLabel')}
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                <input
+                  type="tel"
+                  placeholder="+998 XX XXX XX XX"
+                  required
+                  className="w-full pl-12 pr-4 py-3 bg-black border border-gray-800 text-white placeholder-gray-600 focus:border-gray-700 focus:outline-none transition-colors"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                />
+              </div>
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-400">Вы:</label>
+              <label className="block text-sm font-light mb-4 text-gray-400">
+                {t('account.login.userType')}
+              </label>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
                   onClick={() => setUserType('client')}
-                  className={`p-4 rounded-xl border-2 transition ${
+                  className={`p-4 border transition-all ${
                     userType === 'client'
-                      ? 'border-purple-600 bg-purple-900/20'
-                      : 'border-gray-700 bg-gray-800'
+                      ? 'border-white bg-white text-black'
+                      : 'border-gray-800 bg-gray-950 text-gray-400 hover:border-gray-700'
                   }`}
                 >
-                  <div className="text-2xl mb-1">👤</div>
-                  <div className="text-gray-300">Клиент</div>
+                  <User className="w-8 h-8 mx-auto mb-2" />
+                  <div className="text-sm font-light">{t('account.login.client')}</div>
                 </button>
                 <button
                   type="button"
                   onClick={() => setUserType('master')}
-                  className={`p-4 rounded-xl border-2 transition ${
+                  className={`p-4 border transition-all ${
                     userType === 'master'
-                      ? 'border-purple-600 bg-purple-900/20'
-                      : 'border-gray-700 bg-gray-800'
+                      ? 'border-white bg-white text-black'
+                      : 'border-gray-800 bg-gray-950 text-gray-400 hover:border-gray-700'
                   }`}
                 >
-                  <div className="text-2xl mb-1">👨‍🔧</div>
-                  <div className="text-gray-300">Мастер</div>
+                  <Wrench className="w-8 h-8 mx-auto mb-2" />
+                  <div className="text-sm font-light">{t('account.login.master')}</div>
                 </button>
               </div>
             </div>
             
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl"
+              className="w-full bg-white text-black py-3 hover:bg-gray-100 transition-colors font-medium"
             >
-              Получить код
+              {t('account.login.getCode')}
             </button>
           </form>
         ) : (
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-400">Код из SMS</label>
-              <input
-                type="text"
-                placeholder="XXXX"
-                required
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-center text-2xl tracking-widest text-white placeholder-gray-500"
-                value={code}
-                onChange={e => setCode(e.target.value)}
-                maxLength="4"
-              />
+              <label className="block text-sm font-light mb-2 text-gray-400">
+                {t('account.login.codeLabel')}
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                <input
+                  type="text"
+                  placeholder="XXXX"
+                  required
+                  className="w-full pl-12 pr-4 py-3 bg-black border border-gray-800 text-white text-center text-2xl tracking-widest placeholder-gray-600 focus:border-gray-700 focus:outline-none transition-colors"
+                  value={code}
+                  onChange={e => setCode(e.target.value)}
+                  maxLength="4"
+                />
+              </div>
             </div>
             
-            <p className="text-sm text-gray-400 text-center">
-              Код отправлен на номер {phone}
+            <p className="text-sm text-gray-500 text-center">
+              {t('account.login.codeSent')} {phone}
             </p>
             
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl"
+              className="w-full bg-white text-black py-3 hover:bg-gray-100 transition-colors font-medium"
             >
-              Войти
+              {t('account.login.enter')}
             </button>
             
             <button
               type="button"
               onClick={() => setStep('phone')}
-              className="w-full text-purple-400 hover:text-purple-300"
+              className="w-full text-gray-400 hover:text-white transition-colors text-sm"
             >
-              Изменить номер
+              {t('account.login.changeNumber')}
             </button>
           </form>
         )}
         
-        {/* Быстрая проверка гарантии */}
+        {/* Quick warranty check */}
         <div className="mt-8 pt-8 border-t border-gray-800">
-          <p className="text-center text-gray-400 mb-4">Или проверьте гарантию без входа</p>
+          <p className="text-center text-gray-500 mb-4 text-sm">
+            {t('account.login.orCheckWarranty')}
+          </p>
           <button
             onClick={() => window.location.href = '/account/warranty'}
-            className="w-full border-2 border-purple-600 text-purple-400 py-3 rounded-xl hover:bg-purple-900/20"
+            className="w-full border border-gray-700 text-gray-300 py-3 hover:bg-gray-900 hover:text-white transition-all"
           >
-            Проверить гарантию
+            {t('account.login.checkWarranty')}
           </button>
         </div>
       </motion.div>

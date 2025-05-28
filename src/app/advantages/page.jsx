@@ -2,120 +2,135 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { 
+  Shield, 
+  Radio, 
+  Thermometer, 
+  Smartphone, 
+  ShieldCheck, 
+  Cpu,
+  Check,
+  X,
+  ArrowRight
+} from 'lucide-react'
+import { useTranslation } from '../../hooks/useTranslation'
+import { advantagesLocales } from './advantagesLocales'
 
 export default function AdvantagesPage() {
+  const { t } = useTranslation(advantagesLocales)
+  
   const technologies = [
     {
-      icon: '🔐',
-      title: 'Диалоговый код',
-      description: 'Уникальный алгоритм шифрования с индивидуальным ключом для каждого устройства',
+      icon: Shield,
+      title: t('advantages.technologies.dialogCode.title'),
+      description: t('advantages.technologies.dialogCode.description'),
       details: [
-        'Защита от перехвата и ретрансляции сигнала',
-        'Невозможность клонирования брелока',
-        'Динамическое изменение кода при каждом нажатии',
-        '128-битное шифрование AES'
+        t('advantages.technologies.dialogCode.details.protection'),
+        t('advantages.technologies.dialogCode.details.clone'),
+        t('advantages.technologies.dialogCode.details.dynamic'),
+        t('advantages.technologies.dialogCode.details.encryption')
       ]
     },
     {
-      icon: '📡',
-      title: 'Дальность связи',
-      description: 'До 2000 метров в городских условиях благодаря современным технологиям',
+      icon: Radio,
+      title: t('advantages.technologies.range.title'),
+      description: t('advantages.technologies.range.description'),
       details: [
-        'Усиленный радиомодуль',
-        'Оптимизированная антенна',
-        'Автоматическая регулировка мощности',
-        'Помехозащищенный канал связи'
+        t('advantages.technologies.range.details.module'),
+        t('advantages.technologies.range.details.antenna'),
+        t('advantages.technologies.range.details.power'),
+        t('advantages.technologies.range.details.channel')
       ]
     },
     {
-      icon: '🌡️',
-      title: 'Климат-контроль',
-      description: 'Умный автозапуск с учетом погодных условий и ваших предпочтений',
+      icon: Thermometer,
+      title: t('advantages.technologies.climate.title'),
+      description: t('advantages.technologies.climate.description'),
       details: [
-        'Запуск по температуре двигателя',
-        'Программирование до 4 запусков в сутки',
-        'Контроль температуры в салоне',
-        'Турботаймер для турбированных двигателей'
+        t('advantages.technologies.climate.details.engineTemp'),
+        t('advantages.technologies.climate.details.schedule'),
+        t('advantages.technologies.climate.details.cabinTemp'),
+        t('advantages.technologies.climate.details.turbo')
       ]
     },
     {
-      icon: '📱',
-      title: 'Мобильное управление',
-      description: 'Полный контроль через смартфон из любой точки мира',
+      icon: Smartphone,
+      title: t('advantages.technologies.mobile.title'),
+      description: t('advantages.technologies.mobile.description'),
       details: [
-        'Мгновенные push-уведомления',
-        'История всех событий',
-        'GPS отслеживание маршрутов',
-        'Удаленная диагностика'
+        t('advantages.technologies.mobile.details.notifications'),
+        t('advantages.technologies.mobile.details.history'),
+        t('advantages.technologies.mobile.details.gps'),
+        t('advantages.technologies.mobile.details.diagnostics')
       ]
     },
     {
-      icon: '🛡️',
-      title: 'Многоуровневая защита',
-      description: 'Комплексная система безопасности для максимальной защиты',
+      icon: ShieldCheck,
+      title: t('advantages.technologies.protection.title'),
+      description: t('advantages.technologies.protection.description'),
       details: [
-        '8 независимых охранных зон',
-        'Защита от сканирования',
-        'Блокировка двигателя по CAN',
-        'Тревожная сирена 110 дБ'
+        t('advantages.technologies.protection.details.zones'),
+        t('advantages.technologies.protection.details.scanning'),
+        t('advantages.technologies.protection.details.blocking'),
+        t('advantages.technologies.protection.details.siren')
       ]
     },
     {
-      icon: '🔧',
-      title: 'Простая интеграция',
-      description: 'Бесшовная работа со штатными системами автомобиля',
+      icon: Cpu,
+      title: t('advantages.technologies.integration.title'),
+      description: t('advantages.technologies.integration.description'),
       details: [
-        'Подключение по CAN-шине',
-        'Сохранение заводской гарантии',
-        'Работа со штатным иммобилайзером',
-        'Управление штатной сигнализацией'
+        t('advantages.technologies.integration.details.can'),
+        t('advantages.technologies.integration.details.warranty'),
+        t('advantages.technologies.integration.details.immobilizer'),
+        t('advantages.technologies.integration.details.control')
       ]
     }
   ]
   
+  const comparisonData = [
+    { feature: t('advantages.comparison.range'), pandora: t('advantages.comparison.pandoraRange'), others: t('advantages.comparison.othersRange') },
+    { feature: t('advantages.comparison.protection'), pandora: t('advantages.comparison.dialogCode'), others: t('advantages.comparison.staticCode') },
+    { feature: t('advantages.comparison.mobile'), pandora: true, others: false },
+    { feature: t('advantages.comparison.autostart'), pandora: true, others: true },
+    { feature: t('advantages.comparison.warranty'), pandora: t('advantages.comparison.warranty2'), others: t('advantages.comparison.warranty1') },
+    { feature: t('advantages.comparison.support'), pandora: true, others: false }
+  ]
+  
   return (
-    <div className="page-container min-h-screen bg-gradient-to-br from-black to-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-5xl font-bold text-center mb-4 text-white"
-        >
-          Технологии Pandora
-        </motion.h1>
-        
-        <motion.p
+    <div className="page-container min-h-screen bg-black">
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center text-gray-400 mb-12 text-lg"
+          className="text-center mb-16"
         >
-          Инновационные решения для защиты вашего автомобиля
-        </motion.p>
+          <h1 className="text-5xl font-thin text-white mb-4">
+            {t('advantages.title')}
+          </h1>
+          <p className="text-xl text-gray-500 font-light">
+            {t('advantages.subtitle')}
+          </p>
+        </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {/* Technologies Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {technologies.map((tech, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="bg-gray-900 rounded-3xl shadow-xl p-8 group border border-gray-800 hover:border-purple-600 transition"
+              className="bg-gray-950 border border-gray-800 p-8 hover:border-gray-700 transition-all group"
             >
-              <motion.div
-                className="text-6xl mb-4 inline-block"
-                whileGroupHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                {tech.icon}
-              </motion.div>
-              <h3 className="text-2xl font-bold mb-3 text-white">{tech.title}</h3>
-              <p className="text-gray-400 mb-6">{tech.description}</p>
+              <tech.icon className="w-12 h-12 text-gray-700 mb-6 group-hover:text-gray-500 transition-colors" strokeWidth={1} />
+              <h3 className="text-xl font-light text-white mb-3">{tech.title}</h3>
+              <p className="text-gray-500 mb-6 text-sm">{tech.description}</p>
               <ul className="space-y-2">
                 {tech.details.map((detail, j) => (
                   <li key={j} className="flex items-start text-sm">
-                    <span className="text-purple-400 mr-2 mt-0.5">•</span>
-                    <span className="text-gray-300">{detail}</span>
+                    <span className="text-gray-600 mr-2 mt-1">•</span>
+                    <span className="text-gray-400 font-light">{detail}</span>
                   </li>
                 ))}
               </ul>
@@ -123,55 +138,91 @@ export default function AdvantagesPage() {
           ))}
         </div>
         
-        {/* Сравнение с конкурентами */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8 text-white">Почему именно Pandora?</h2>
-          <div className="bg-gray-900 rounded-3xl shadow-xl overflow-hidden border border-gray-800">
+        {/* Comparison Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="mb-20"
+        >
+          <h2 className="text-3xl font-thin text-center text-white mb-12">
+            {t('advantages.comparisonTitle')}
+          </h2>
+          <div className="bg-gray-950 border border-gray-800 overflow-hidden">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+              <thead className="bg-gray-900">
                 <tr>
-                  <th className="px-6 py-4 text-left">Функция</th>
-                  <th className="px-6 py-4 text-center">Pandora</th>
-                  <th className="px-6 py-4 text-center">Другие бренды</th>
+                  <th className="px-6 py-4 text-left font-light text-gray-400">
+                    {t('advantages.comparison.feature')}
+                  </th>
+                  <th className="px-6 py-4 text-center font-light text-white">
+                    Pandora
+                  </th>
+                  <th className="px-6 py-4 text-center font-light text-gray-400">
+                    {t('advantages.comparison.others')}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['Дальность связи', 'До 2000м', 'До 800м'],
-                  ['Защита от взлома', 'Диалоговый код', 'Статический код'],
-                  ['Мобильное приложение', '✓ Бесплатно', '✗ Платная опция'],
-                  ['Автозапуск', '✓ Умный', '✓ Базовый'],
-                  ['Гарантия', '2 года', '1 год'],
-                  ['Поддержка 24/7', '✓', '✗']
-                ].map(([feature, pandora, others], i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-gray-800' : ''}>
-                    <td className="px-6 py-4 font-medium text-gray-300">{feature}</td>
-                    <td className="px-6 py-4 text-center text-green-400 font-semibold">{pandora}</td>
-                    <td className="px-6 py-4 text-center text-gray-500">{others}</td>
+                {comparisonData.map((row, i) => (
+                  <tr key={i} className={i % 2 === 0 ? 'bg-gray-950' : 'bg-gray-900/50'}>
+                    <td className="px-6 py-4 text-gray-300 font-light">{row.feature}</td>
+                    <td className="px-6 py-4 text-center">
+                      {typeof row.pandora === 'boolean' ? (
+                        row.pandora ? (
+                          <Check className="w-5 h-5 text-green-500 mx-auto" />
+                        ) : (
+                          <X className="w-5 h-5 text-red-500 mx-auto" />
+                        )
+                      ) : (
+                        <span className="text-white font-light">{row.pandora}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {typeof row.others === 'boolean' ? (
+                        row.others ? (
+                          <Check className="w-5 h-5 text-green-500 mx-auto" />
+                        ) : (
+                          <X className="w-5 h-5 text-red-500 mx-auto" />
+                        )
+                      ) : (
+                        <span className="text-gray-500 font-light">{row.others}</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </section>
+        </motion.section>
         
-        {/* CTA секция */}
+        {/* CTA Section */}
         <motion.section
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="text-center bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 text-white"
+          className="text-center"
         >
-          <h2 className="text-3xl font-bold mb-4">Готовы к максимальной защите?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Выберите свою систему Pandora и получите профессиональную установку
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/products" className="bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition">
-              Выбрать систему
-            </Link>
-            <Link href="/service" className="border-2 border-white text-white px-8 py-3 rounded-xl font-semibold hover:bg-white/10 transition">
-              Найти мастера
-            </Link>
+          <div className="bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 p-12">
+            <h2 className="text-3xl font-thin text-white mb-4">
+              {t('advantages.cta.title')}
+            </h2>
+            <p className="text-xl text-gray-400 mb-8 font-light">
+              {t('advantages.cta.subtitle')}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                href="/products" 
+                className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 hover:bg-gray-100 transition-colors group"
+              >
+                <span className="font-medium">{t('advantages.cta.chooseSystem')}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link 
+                href="/service" 
+                className="inline-flex items-center justify-center gap-2 border border-gray-700 text-white px-8 py-3 hover:bg-gray-900 transition-all"
+              >
+                <span className="font-medium">{t('advantages.cta.findMaster')}</span>
+              </Link>
+            </div>
           </div>
         </motion.section>
       </div>

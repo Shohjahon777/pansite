@@ -2,79 +2,120 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { 
+  Phone, 
+  Mail, 
+  MapPin, 
+  ArrowUp,
+  Shield,
+  Clock,
+  ChevronRight
+} from 'lucide-react'
+import { useTranslation } from '../../hooks/useTranslation'
+import { footerLocales } from './footerLocales'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const { t } = useTranslation(footerLocales)
   
   const footerLinks = {
     products: [
-      { href: '/products', label: 'Все системы' },
+      { href: '/products', label: t('footer.columns.products.links.allSystems') },
       { href: '/products/dx91', label: 'Pandora DX-91' },
       { href: '/products/dx4gs', label: 'Pandora DX-4GS' },
       { href: '/products/dxl5000', label: 'Pandora DXL-5000' },
-      { href: '/advantages', label: 'Преимущества' },
+      { href: '/advantages', label: t('footer.columns.products.links.advantages') },
     ],
     service: [
-      { href: '/service', label: 'Найти мастера' },
-      { href: '/service#dealers', label: 'Дилерские центры' },
-      { href: '/service#map', label: 'Карта установщиков' },
-      { href: '/reviews', label: 'Все отзывы' },
+      { href: '/service', label: t('footer.columns.service.links.findMaster') },
+      { href: '/service#dealers', label: t('footer.columns.service.links.dealers') },
+      { href: '/service#map', label: t('footer.columns.service.links.mapInstallers') },
+      { href: '/reviews', label: t('footer.columns.service.links.allReviews') },
     ],
     support: [
-      { href: '/account', label: 'Личный кабинет' },
-      { href: '/account/warranty', label: 'Проверка гарантии' },
-      { href: '/account#requests', label: 'Мои заявки' },
-      { href: '/service', label: 'Записаться на установку' },
+      { href: '/account', label: t('footer.columns.support.links.account') },
+      { href: '/account/warranty', label: t('footer.columns.support.links.checkWarranty') },
+      { href: '/account#requests', label: t('footer.columns.support.links.myRequests') },
+      { href: '/service', label: t('footer.columns.support.links.bookInstallation') },
     ],
     company: [
-      { href: '/advantages', label: 'О технологиях' },
-      { href: '/reviews', label: 'Отзывы клиентов' },
-      { href: '/#contacts', label: 'Контакты' },
+      { href: '/advantages', label: t('footer.columns.company.links.about') },
+      { href: '/reviews', label: t('footer.columns.company.links.reviews') },
+      { href: '/#contacts', label: t('footer.columns.company.links.contacts') },
     ]
   }
   
-  const socialLinks = [
-    { icon: '📱', href: 'https://t.me/pandorauz', label: 'Telegram' },
-    { icon: '📷', href: '#', label: 'Instagram' },
-    { icon: '💬', href: '#', label: 'WhatsApp' },
-  ]
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   
   return (
-    <footer className="bg-gray-950 text-white border-t border-gray-800">
+    <footer className="bg-gray-950 text-white border-t border-gray-900">
+      {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
-          <div className="md:col-span-2">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">P</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+          {/* Brand Section */}
+          <div className="lg:col-span-2">
+            <Link href="/" className="inline-flex items-center space-x-3 mb-6 group">
+              <div className="relative w-12 h-12">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800 rounded-sm rotate-45 group-hover:rotate-90 transition-transform duration-500" />
+                <div className="relative flex items-center justify-center h-full">
+                  <span className="text-white font-bold text-xl">P</span>
+                </div>
               </div>
-              <span className="font-bold text-xl">Pandora</span>
+              <div>
+                <span className="text-white font-light text-2xl tracking-wider">
+                  PANDORA
+                </span>
+                <span className="block text-[10px] text-gray-500 tracking-[0.3em] uppercase">
+                  Security Systems
+                </span>
+              </div>
             </Link>
-            <p className="text-gray-400 mb-6">
-              Официальный дистрибьютор охранных систем Pandora в Узбекистане
+            <p className="text-gray-400 mb-8 max-w-sm font-light">
+              {t('footer.description')}
             </p>
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition"
-                >
-                  <span className="text-xl">{social.icon}</span>
-                </motion.a>
-              ))}
+            
+            {/* Contact Info */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 text-gray-400">
+                <Clock className="w-4 h-4 text-gray-600" />
+                <span className="text-sm">{t('footer.contacts.support')}</span>
+              </div>
+              <a 
+                href={`tel:${t('footer.contacts.phone').replace(/\s/g, '')}`}
+                className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors group"
+              >
+                <Phone className="w-4 h-4 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                <span className="font-light">{t('footer.contacts.phone')}</span>
+              </a>
+              <a 
+                href={`mailto:${t('footer.contacts.email')}`}
+                className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors group"
+              >
+                <Mail className="w-4 h-4 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                <span className="font-light">{t('footer.contacts.email')}</span>
+              </a>
+              <div className="flex items-start gap-3 text-gray-400">
+                <MapPin className="w-4 h-4 text-gray-600 mt-0.5" />
+                <span className="text-sm font-light">{t('footer.contacts.address')}</span>
+              </div>
             </div>
           </div>
           
+          {/* Links Columns */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Продукты</h3>
-            <ul className="space-y-2">
+            <h3 className="font-medium text-sm uppercase tracking-wider text-gray-300 mb-4">
+              {t('footer.columns.products.title')}
+            </h3>
+            <ul className="space-y-3">
               {footerLinks.products.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-purple-400 transition">
+                  <Link 
+                    href={link.href} 
+                    className="text-gray-500 hover:text-white transition-colors text-sm font-light flex items-center group"
+                  >
+                    <ChevronRight className="w-3 h-3 mr-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {link.label}
                   </Link>
                 </li>
@@ -83,11 +124,17 @@ export default function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-lg mb-4">Услуги</h3>
-            <ul className="space-y-2">
+            <h3 className="font-medium text-sm uppercase tracking-wider text-gray-300 mb-4">
+              {t('footer.columns.service.title')}
+            </h3>
+            <ul className="space-y-3">
               {footerLinks.service.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-purple-400 transition">
+                  <Link 
+                    href={link.href} 
+                    className="text-gray-500 hover:text-white transition-colors text-sm font-light flex items-center group"
+                  >
+                    <ChevronRight className="w-3 h-3 mr-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {link.label}
                   </Link>
                 </li>
@@ -96,11 +143,17 @@ export default function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-lg mb-4">Поддержка</h3>
-            <ul className="space-y-2">
+            <h3 className="font-medium text-sm uppercase tracking-wider text-gray-300 mb-4">
+              {t('footer.columns.support.title')}
+            </h3>
+            <ul className="space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-purple-400 transition">
+                  <Link 
+                    href={link.href} 
+                    className="text-gray-500 hover:text-white transition-colors text-sm font-light flex items-center group"
+                  >
+                    <ChevronRight className="w-3 h-3 mr-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {link.label}
                   </Link>
                 </li>
@@ -109,43 +162,41 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 mb-4 md:mb-0">
-              © {currentYear} Pandora Uzbekistan. Все права защищены.
-            </p>
-            <div className="flex items-center space-x-6">
-              <a href="tel:+998901234567" className="text-gray-400 hover:text-purple-400 transition">
-                📞 +998 90 123 45 67
-              </a>
-              <a href="mailto:info@pandora.uz" className="text-gray-400 hover:text-purple-400 transition">
-                ✉️ info@pandora.uz
-              </a>
+        {/* Bottom Section */}
+        <div className="border-t border-gray-900 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Shield className="w-4 h-4" />
+              <span className="font-light">
+                {t('footer.copyright', { year: currentYear })}
+              </span>
             </div>
+            
+            {/* Back to top button */}
+            <motion.button
+              onClick={scrollToTop}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm"
+            >
+              <span className="font-light uppercase tracking-wider">{t('footer.backToTop')}</span>
+              <div className="w-8 h-8 border border-gray-700 hover:border-gray-500 transition-colors flex items-center justify-center">
+                <ArrowUp className="w-4 h-4" />
+              </div>
+            </motion.button>
           </div>
         </div>
       </div>
       
-      {/* Floating action buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-50">
-        <motion.a
-          href="https://t.me/pandorauz"
-          target="_blank"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition"
-        >
-          <span className="text-2xl">💬</span>
-        </motion.a>
-        <motion.button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 bg-gray-800 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition"
-        >
-          <span className="text-2xl">⬆️</span>
-        </motion.button>
-      </div>
+      {/* Floating Contact Button */}
+      <motion.a
+        href={`tel:${t('footer.contacts.phone').replace(/\s/g, '')}`}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-white text-black flex items-center justify-center shadow-2xl hover:bg-gray-100 transition-colors z-40"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <Phone className="w-5 h-5" />
+      </motion.a>
     </footer>
   )
 }

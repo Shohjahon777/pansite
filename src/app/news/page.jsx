@@ -30,30 +30,53 @@ export default function NewsPage() {
   const [hoveredItem, setHoveredItem] = useState(null)
   const [likedItems, setLikedItems] = useState([])
   const [viewMode, setViewMode] = useState('grid') // grid or list
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const { t } = useTranslation(newsLocales)
   
-  // Animated background particles
-  const FloatingParticle = ({ delay }) => (
-    <motion.div
-      className="absolute w-1 h-1 bg-gray-700 rounded-full"
-      initial={{ 
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        opacity: 0 
-      }}
-      animate={{ 
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        opacity: [0, 1, 0]
-      }}
-      transition={{
-        duration: 20,
-        delay,
-        repeat: Infinity,
-        ease: "linear"
-      }}
-    />
-  )
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    }
+    
+    // Set initial size
+    handleResize()
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+  
+  // Animated background particles - исправленная версия
+  const FloatingParticle = ({ delay, index }) => {
+    const randomX = Math.random() * 100
+    const randomY = Math.random() * 100
+    const randomEndX = Math.random() * 100
+    const randomEndY = Math.random() * 100
+    
+    return (
+      <motion.div
+        className="absolute w-1 h-1 bg-gray-700 rounded-full"
+        style={{
+          left: `${randomX}%`,
+          top: `${randomY}%`
+        }}
+        animate={{ 
+          left: `${randomEndX}%`,
+          top: `${randomEndY}%`,
+          opacity: [0, 1, 0]
+        }}
+        transition={{
+          duration: 20,
+          delay,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
+    )
+  }
   
   const newsItems = [
     {
@@ -155,41 +178,57 @@ export default function NewsPage() {
   }
   
   // Breaking news ticker
-  const BreakingNews = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="bg-gradient-to-r from-red-950/20 to-red-900/10 border-y border-red-900/30 py-3 mb-12 overflow-hidden"
-    >
-      <div className="flex items-center">
-        <div className="flex items-center gap-2 px-6 border-r border-red-900/30">
-          <Zap className="w-4 h-4 text-red-400 animate-pulse" />
-          <span className="text-red-400 text-sm font-medium uppercase tracking-wider">
-            {t('news.breaking')}
-          </span>
+  const BreakingNews = () => {
+    const [tickerPosition, setTickerPosition] = useState(0)
+    
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setTickerPosition(prev => prev - 1)
+      }, 30)
+      
+      return () => clearInterval(interval)
+    }, [])
+    
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="bg-gradient-to-r from-red-950/20 to-red-900/10 border-y border-red-900/30 py-3 mb-12 overflow-hidden"
+      >
+        <div className="flex items-center">
+          <div className="flex items-center gap-2 px-6 border-r border-red-900/30">
+            <Zap className="w-4 h-4 text-red-400 animate-pulse" />
+            <span className="text-red-400 text-sm font-medium uppercase tracking-wider">
+              {t('news.breaking')}
+            </span>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <div 
+              className="flex gap-12 px-6 whitespace-nowrap"
+              style={{ transform: `translateX(${tickerPosition}px)` }}
+            >
+              <span className="text-gray-300">
+                Скидка 20% на все системы только сегодня! • Новая Pandora DXL-6000 уже в продаже • 
+                Бесплатная диагностика при установке • Приведи друга и получи $50 • 
+                Скидка 20% на все системы только сегодня! • Новая Pandora DXL-6000 уже в продаже • 
+              </span>
+            </div>
+          </div>
         </div>
-        <motion.div
-          className="flex gap-12 px-6"
-          animate={{ x: [-1000, 1000] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        >
-          <span className="text-gray-300 whitespace-nowrap">
-            Скидка 20% на все системы только сегодня! • Новая Pandora DXL-6000 уже в продаже • 
-            Бесплатная диагностика при установке • Приведи друга и получи $50
-          </span>
-        </motion.div>
-      </div>
-    </motion.div>
-  )
+      </motion.div>
+    )
+  }
   
   return (
     <div className="page-container min-h-screen bg-black relative overflow-hidden">
-      {/* Animated background */}
-      <div className="fixed inset-0 z-0">
-        {[...Array(20)].map((_, i) => (
-          <FloatingParticle key={i} delay={i * 0.5} />
-        ))}
-      </div>
+      {/* Animated background - only render after mount */}
+      {windowSize.width > 0 && (
+        <div className="fixed inset-0 z-0">
+          {[...Array(20)].map((_, i) => (
+            <FloatingParticle key={i} delay={i * 0.5} index={i} />
+          ))}
+        </div>
+      )}
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
         <motion.div
@@ -277,16 +316,7 @@ export default function NewsPage() {
                   >
                     {/* Animated gradient background */}
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent"
-                      animate={{
-                        x: [-300, 300],
-                        opacity: [0, 1, 0]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
+                      className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                     />
                     
                     <div className="relative p-8 lg:p-12">

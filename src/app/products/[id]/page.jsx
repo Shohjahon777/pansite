@@ -157,7 +157,7 @@ export default function ProductDetailPage() {
   
   return (
     <div className="page-container min-h-screen bg-black">
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-20">
         {/* Breadcrumbs */}
         <div className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
           <Link href="/" className="hover:text-white transition-colors">{t('productDetail.breadcrumbs.home')}</Link>

@@ -131,7 +131,7 @@ export default function HomePage() {
             hintContent: point.name,
             balloonContent: `<strong>${point.name}</strong><br/>${point.type === 'dealer' ? 'Дилерский центр' : 'Сертифицированный мастер'}`
           }, {
-            preset: point.type === 'dealer' ? 'islands#redIcon' : 'islands#blueIcon'
+            preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#blueIcon'
           })
           map.geoObjects.add(placemark)
         })
@@ -153,6 +153,8 @@ export default function HomePage() {
         <motion.div style={{ y, opacity }} className="absolute inset-0">
           <div className={`absolute inset-0 bg-gradient-to-br ${slides[currentSlide].gradient} transition-all duration-1000`} />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+          {/* Синее свечение */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.03)_0%,transparent_50%)]" />
         </motion.div>
 
         <div className="relative z-10 min-h-screen flex items-center">
@@ -222,8 +224,8 @@ export default function HomePage() {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`h-1 transition-all duration-500 ${currentSlide === index
-                  ? 'bg-white w-12'
-                  : 'bg-white/30 w-6 hover:bg-white/50'
+                ? 'bg-white w-12'
+                : 'bg-white/30 w-6 hover:bg-white/50'
                 }`}
             />
           ))}
@@ -231,8 +233,9 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gray-950 border-t border-gray-900">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-20 bg-gradient-to-b from-gray-950 to-gray-950/95 relative border-t border-gray-900">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.05)_0%,transparent_40%)]" />
+        <div className="max-w-7xl mx-auto px-4 relative">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, i) => (
               <motion.div
@@ -255,8 +258,9 @@ export default function HomePage() {
       </section>
 
       {/* Advantages */}
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-24 bg-black relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-950/[0.02] to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -295,8 +299,9 @@ export default function HomePage() {
       </section>
 
       {/* Quick Actions */}
-      <section className="py-24 bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-24 bg-gradient-to-br from-gray-950 via-gray-950/95 to-black relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.04)_0%,transparent_50%)]" />
+        <div className="max-w-7xl mx-auto px-4 relative">
           <h2 className="text-3xl lg:text-4xl font-thin text-center text-white mb-16">
             {t('quickActions.title')}
           </h2>
@@ -331,8 +336,9 @@ export default function HomePage() {
       </section>
 
       {/* Map Section */}
-      <section className="py-24 bg-black border-t border-gray-900">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-24 bg-black relative border-t border-gray-900">
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-950/[0.03] to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 relative">
           <div className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-thin text-white mb-4">
               {t('map.title')}
@@ -382,11 +388,12 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-t from-gray-950 to-black">
+      <section className="py-24 bg-gradient-to-t from-gray-950 via-black to-black relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(59,130,246,0.05)_0%,transparent_60%)]" />
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          className="max-w-4xl mx-auto px-4 text-center"
+          className="max-w-4xl mx-auto px-4 text-center relative"
         >
           <Cpu className="w-20 h-20 text-gray-700 mx-auto mb-8" strokeWidth={1} />
           <h2 className="text-4xl lg:text-5xl font-thin text-white mb-6">

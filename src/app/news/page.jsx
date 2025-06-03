@@ -24,15 +24,70 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '../../hooks/useTranslation'
 import { newsLocales } from './newsLocales'
+import {useLanguageStore} from "@/src/store/language";
+import axios from "axios";
 
 export default function NewsPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [hoveredItem, setHoveredItem] = useState(null)
   const [likedItems, setLikedItems] = useState([])
+  const [newsItems, setNewsItems] = useState([])
   const [viewMode, setViewMode] = useState('grid') // grid or list
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const { t } = useTranslation(newsLocales)
-  
+  const {currentLocale} = useLanguageStore()
+  const mainUrl = process.env.NEXT_PUBLIC_API_URL
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchNews()
+  }, [currentLocale]);
+
+
+  const fetchNews = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await axios.post('/api/get-news', { locale: currentLocale });
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const transformedNews = response.data.map((item, index) => ({
+        id: parseInt(item.id),
+        title: item.title || `News Item ${index + 1}`,
+        excerpt: item.content
+            ? item.content.substring(0, 150).replace(/<[^>]*>/g, '') + '...'
+            : 'Click to read more...',
+        content: item.content || '',
+        category: item.category,
+        date: formatDate(item.date),
+        readTime: item.readtime || '5 мин',
+        views: parseInt(item.views) || 0,
+        likes: parseInt(item.like) || 0,
+        image: item.image || null,
+        featured: index === 0, // First item is featured
+        icon: getCategoryIcon(item.category),
+        color: item.color || getRandomColor(),
+        tags: item.tags
+            ? item.tags.split(',').filter(tag => tag.trim() !== '').map(tag => tag.trim())
+            : ['News']
+      }));
+
+      setNewsItems(transformedNews);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      setError('Failed to load news. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
@@ -78,92 +133,165 @@ export default function NewsPage() {
     )
   }
   
-  const newsItems = [
-    {
-      id: 1,
-      title: t('news.items.newModel.title'),
-      excerpt: t('news.items.newModel.excerpt'),
-      content: t('news.items.newModel.content'),
-      category: 'product',
-      date: '28.05.2025',
-      readTime: '3 мин',
-      views: 1234,
-      likes: 89,
-      image: null,
-      featured: true,
-      icon: Package,
-      color: 'from-purple-900/20 to-pink-900/20',
-      tags: ['Новинка', 'DXL-6000', 'AI']
-    },
-    {
-      id: 2,
-      title: t('news.items.training.title'),
-      excerpt: t('news.items.training.excerpt'),
-      content: t('news.items.training.content'),
-      category: 'event',
-      date: '25.05.2025',
-      readTime: '2 мин',
-      views: 567,
-      likes: 45,
-      image: null,
-      icon: Award,
-      color: 'from-blue-900/20 to-cyan-900/20',
-      tags: ['Обучение', 'Сертификация']
-    },
-    {
-      id: 3,
-      title: t('news.items.partnership.title'),
-      excerpt: t('news.items.partnership.excerpt'),
-      content: t('news.items.partnership.content'),
-      category: 'company',
-      date: '20.05.2025',
-      readTime: '4 мин',
-      views: 892,
-      likes: 67,
-      image: null,
-      icon: TrendingUp,
-      color: 'from-green-900/20 to-emerald-900/20',
-      tags: ['Партнерство', 'Расширение']
-    },
-    {
-      id: 4,
-      title: t('news.items.technology.title'),
-      excerpt: t('news.items.technology.excerpt'),
-      content: t('news.items.technology.content'),
-      category: 'technology',
-      date: '15.05.2025',
-      readTime: '5 мин',
-      views: 2103,
-      likes: 156,
-      image: null,
-      icon: Shield,
-      color: 'from-orange-900/20 to-red-900/20',
-      tags: ['Обновление', 'Приложение', 'v3.0']
-    },
-    {
-      id: 5,
-      title: t('news.items.award.title'),
-      excerpt: t('news.items.award.excerpt'),
-      content: t('news.items.award.content'),
-      category: 'company',
-      date: '10.05.2025',
-      readTime: '3 мин',
-      views: 1567,
-      likes: 203,
-      image: null,
-      icon: Sparkles,
-      color: 'from-yellow-900/20 to-amber-900/20',
-      tags: ['Награда', 'Достижение']
-    }
-  ]
-  
+  // const newsItems = [
+  //   {
+  //     id: 1,
+  //     title: t('news.items.newModel.title'),
+  //     excerpt: t('news.items.newModel.excerpt'),
+  //     content: t('news.items.newModel.content'),
+  //     category: 'product',
+  //     date: '28.05.2025',
+  //     readTime: '3 мин',
+  //     views: 1234,
+  //     likes: 89,
+  //     image: null,
+  //     featured: true,
+  //     icon: Package,
+  //     color: 'from-purple-900/20 to-pink-900/20',
+  //     tags: ['Новинка', 'DXL-6000', 'AI']
+  //   },
+  //   {
+  //     id: 2,
+  //     title: t('news.items.training.title'),
+  //     excerpt: t('news.items.training.excerpt'),
+  //     content: t('news.items.training.content'),
+  //     category: 'event',
+  //     date: '25.05.2025',
+  //     readTime: '2 мин',
+  //     views: 567,
+  //     likes: 45,
+  //     image: null,
+  //     icon: Award,
+  //     color: 'from-blue-900/20 to-cyan-900/20',
+  //     tags: ['Обучение', 'Сертификация']
+  //   },
+  //   {
+  //     id: 3,
+  //     title: t('news.items.partnership.title'),
+  //     excerpt: t('news.items.partnership.excerpt'),
+  //     content: t('news.items.partnership.content'),
+  //     category: 'company',
+  //     date: '20.05.2025',
+  //     readTime: '4 мин',
+  //     views: 892,
+  //     likes: 67,
+  //     image: null,
+  //     icon: TrendingUp,
+  //     color: 'from-green-900/20 to-emerald-900/20',
+  //     tags: ['Партнерство', 'Расширение']
+  //   },
+  //   {
+  //     id: 4,
+  //     title: t('news.items.technology.title'),
+  //     excerpt: t('news.items.technology.excerpt'),
+  //     content: t('news.items.technology.content'),
+  //     category: 'technology',
+  //     date: '15.05.2025',
+  //     readTime: '5 мин',
+  //     views: 2103,
+  //     likes: 156,
+  //     image: null,
+  //     icon: Shield,
+  //     color: 'from-orange-900/20 to-red-900/20',
+  //     tags: ['Обновление', 'Приложение', 'v3.0']
+  //   },
+  //   {
+  //     id: 5,
+  //     title: t('news.items.award.title'),
+  //     excerpt: t('news.items.award.excerpt'),
+  //     content: t('news.items.award.content'),
+  //     category: 'company',
+  //     date: '10.05.2025',
+  //     readTime: '3 мин',
+  //     views: 1567,
+  //     likes: 203,
+  //     image: null,
+  //     icon: Sparkles,
+  //     color: 'from-yellow-900/20 to-amber-900/20',
+  //     tags: ['Награда', 'Достижение']
+  //   },
+  //   // {
+  //   //   "id": "382",
+  //   //   "title": "",
+  //   //   "text": "",
+  //   //   "category": "product",
+  //   //   "date": "29.11.2024 10:48:09",
+  //   //   "readtime": "5мин",
+  //   //   "views": "1324",
+  //   //   "color": "from-purple-900/20 to-pink-900/20",
+  //   //   "tags": "Новинка,DXL-6000,AI"
+  //   // },
+  // ]
+
+
+  const formatDate = (dateString) => {
+    return dateString.split(' ')[0];
+  };
+
+  const getCategoryIcon = (category) => {
+    const iconMap = {
+      product: Package,
+      event: Calendar,
+      company: TrendingUp,
+      technology: Shield,
+      default: Newspaper
+    };
+    return iconMap[category] || iconMap.default;
+  };
+
+  const getRandomColor = () => {
+    const colors = [
+      'from-purple-900/20 to-pink-900/20',
+      'from-blue-900/20 to-cyan-900/20',
+      'from-green-900/20 to-emerald-900/20',
+      'from-orange-900/20 to-red-900/20',
+      'from-yellow-900/20 to-amber-900/20'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  const calculateCategoryCount = (items, category) => {
+    if (category === 'all') return items.length;
+    return items.filter(item => item.category === category).length;
+  };
+
   const categories = [
-    { value: 'all', label: t('news.categories.all'), count: newsItems.length, icon: Newspaper },
-    { value: 'product', label: t('news.categories.products'), count: 2, icon: Package },
-    { value: 'event', label: t('news.categories.events'), count: 1, icon: Calendar },
-    { value: 'company', label: t('news.categories.company'), count: 2, icon: TrendingUp },
-    { value: 'technology', label: t('news.categories.technology'), count: 1, icon: Shield }
-  ]
+    { value: 'all', label: t('news.categories.all'), count: calculateCategoryCount(newsItems, 'all'), icon: Newspaper },
+    { value: 'product', label: t('news.categories.products'), count: calculateCategoryCount(newsItems, 'product'), icon: Package },
+    { value: 'event', label: t('news.categories.events'), count: calculateCategoryCount(newsItems, 'event'), icon: Calendar },
+    { value: 'company', label: t('news.categories.company'), count: calculateCategoryCount(newsItems, 'company'), icon: TrendingUp },
+    { value: 'technology', label: t('news.categories.technology'), count: calculateCategoryCount(newsItems, 'technology'), icon: Shield }
+  ];
+
+  const LoadingSpinner = () => (
+      <div className="flex justify-center items-center py-20">
+        <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-8 h-8 border-2 border-gray-700 border-t-white rounded-full"
+        />
+      </div>
+  );
+
+    const ErrorMessage = () => (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-20"
+        >
+            <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+            <h3 className="text-xl text-white mb-2">Something went wrong</h3>
+            <p className="text-gray-400 mb-6">{error}</p>
+            <motion.button
+                onClick={fetchNews}
+                className="px-6 py-3 bg-white text-black hover:bg-gray-200 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+            >
+                Try Again
+            </motion.button>
+        </motion.div>
+    );
   
   const filteredNews = selectedCategory === 'all' 
     ? newsItems 
@@ -297,8 +425,13 @@ export default function NewsPage() {
             </button>
           </div>
         </div>
-        
-        {/* Featured News Card */}
+
+        {loading ? (
+            <LoadingSpinner />
+        ) : error ? (
+            <ErrorMessage />
+        ) : (
+            <> {/* Featured News Card */}
         <AnimatePresence mode="wait">
           {selectedCategory === 'all' && (
             <motion.div
@@ -401,8 +534,8 @@ export default function NewsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={viewMode === 'grid' 
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
+            className={viewMode === 'grid'
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               : "space-y-4"
             }
           >
@@ -416,11 +549,11 @@ export default function NewsPage() {
                 onMouseLeave={() => setHoveredItem(null)}
               >
                 <Link href={`/news/${item.id}`}>
-                  <motion.article 
+                  <motion.article
                     className={`bg-gray-950 border border-gray-800 overflow-hidden group relative ${
                       viewMode === 'list' ? 'flex' : ''
                     }`}
-                    whileHover={{ 
+                    whileHover={{
                       scale: viewMode === 'grid' ? 1.02 : 1,
                       borderColor: 'rgb(107 114 128)'
                     }}
@@ -436,33 +569,39 @@ export default function NewsPage() {
                         />
                       )}
                     </AnimatePresence>
-                    
-                    <div className={`relative z-10 ${viewMode === 'list' ? 'flex-shrink-0 w-48' : ''}`}>
-                      <div className={`${viewMode === 'list' ? 'h-full' : 'aspect-video'} bg-gray-900 border-b border-gray-800 flex items-center justify-center relative overflow-hidden`}>
-                        <motion.div
-                          animate={hoveredItem === item.id ? { scale: 1.1, rotate: 5 } : {}}
-                        >
-                          <item.icon className="w-16 h-16 text-gray-700" strokeWidth={1} />
-                        </motion.div>
-                        
-                        {/* Category badge */}
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1 bg-black/80 backdrop-blur text-xs text-gray-400 uppercase tracking-wider">
-                            {categories.find(c => c.value === item.category)?.label}
-                          </span>
-                        </div>
+
+                    <div className={`${viewMode === 'list' ? 'h-full' : 'aspect-video'} bg-gray-900 border-b border-gray-800 flex items-center justify-center relative overflow-hidden`}>
+                      {item.image ? (
+                          <img
+                              src={`${mainUrl}/b/core/m$load_image?sha=${item.image}`} // or your image path
+                              alt={item.title}
+                              className="w-full h-full object-cover"
+                          />
+                      ) : (
+                          <motion.div
+                              animate={hoveredItem === item.id ? { scale: 1.1, rotate: 5 } : {}}
+                          >
+                            <item.icon className="w-16 h-16 text-gray-700" strokeWidth={1} />
+                          </motion.div>
+                      )}
+
+                      {/* Category badge - overlay on image */}
+                      <div className="absolute top-4 left-4">
+    <span className="px-3 py-1 bg-black/80 backdrop-blur text-xs text-gray-400 uppercase tracking-wider">
+      {categories.find(c => c.value === item.category)?.label}
+    </span>
                       </div>
                     </div>
-                    
+
                     <div className={`relative z-10 p-6 ${viewMode === 'list' ? 'flex-1' : ''}`}>
                       <h3 className={`${viewMode === 'list' ? 'text-2xl' : 'text-xl'} font-light text-white mb-3 group-hover:text-gray-300 transition-colors`}>
                         {item.title}
                       </h3>
-                      
+
                       <p className="text-gray-500 mb-4 font-light line-clamp-2">
                         {item.excerpt}
                       </p>
-                      
+
                       <div className="flex flex-wrap gap-2 mb-4">
                         {item.tags.slice(0, 2).map(tag => (
                           <span key={tag} className="text-xs text-gray-600">
@@ -470,7 +609,7 @@ export default function NewsPage() {
                           </span>
                         ))}
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4 text-xs text-gray-600">
                           <span className="flex items-center gap-1">
@@ -495,7 +634,7 @@ export default function NewsPage() {
                             {item.likes + (likedItems.includes(item.id) ? 1 : 0)}
                           </motion.button>
                         </div>
-                        
+
                         <motion.div
                           className="text-gray-400 group-hover:text-white transition-colors"
                           whileHover={{ x: 5 }}
@@ -510,6 +649,8 @@ export default function NewsPage() {
             ))}
           </motion.div>
         </AnimatePresence>
+            </>
+        )}
         
         {/* Load More with animation */}
         <motion.div 

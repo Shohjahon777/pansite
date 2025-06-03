@@ -32,6 +32,7 @@ export default function ServicePage() {
   const [regions, setRegions] = useState([])
   const { t } = useTranslation(serviceLocales)
   const {currentLocale} = useLanguageStore()
+  const mainUrl = process.env.NEXT_PUBLIC_API_URL
 
 
 
@@ -284,7 +285,7 @@ export default function ServicePage() {
                     <div className="w-16 h-16 bg-gray-900 border border-gray-800 flex items-center justify-center flex-shrink-0">
                       {master.avatar ? (
                         <img 
-                          src={master.avatar} 
+                          src={`${mainUrl}/${master.avatar}`}
                           alt={master.name}
                           className="w-full h-full object-cover"
                         />

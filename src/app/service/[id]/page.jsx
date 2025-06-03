@@ -25,6 +25,8 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '../../../hooks/useTranslation'
 import { masterDetailLocales } from './masterDetail'
+import {useLanguageStore} from "@/src/store/language";
+import axios from "axios";
 
 export default function MasterDetailPage() {
   const params = useParams()
@@ -35,191 +37,246 @@ export default function MasterDetailPage() {
   const [activeTab, setActiveTab] = useState('about')
   const [showBooking, setShowBooking] = useState(false)
   const [selectedService, setSelectedService] = useState(null)
+  const [regions, setRegions] = useState([]);
+
+    // const [mastersDB, setMastersDB] = useState([])
   const { t } = useTranslation(masterDetailLocales)
-  
-  useEffect(() => {
+  const {currentLocale} = useLanguageStore()
+  const mainUrl = process.env.NEXT_PUBLIC_API_URL
+
+
+    const fetchRegions = async () => {
+        try {
+            const response = await axios.post('/api/get-regions', { locale: currentLocale });
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            setRegions(response.data);
+        } catch (error) {
+            console.error('Error fetching regions:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchRegions();
+    }, [currentLocale]);
+
+
+
+    const transformMasterData = (apiData) => {
+        if (!apiData || apiData.length === 0) return null;
+
+        const masterData = apiData[0];
+
+        const parseSchedule = (scheduleArray) => {
+            const schedule = {};
+            if (scheduleArray && scheduleArray.length > 0) {
+                const scheduleStr = scheduleArray[0];
+                if (scheduleStr && scheduleStr !== '-') {
+                    const parts = scheduleStr.split(': ');
+                    if (parts.length === 2) {
+                        const days = parts[0].split(',');
+                        const time = parts[1];
+                        days.forEach(day => {
+                            schedule[day.trim()] = time;
+                        });
+                    }
+                }
+            }
+
+            if (Object.keys(schedule).length === 0) {
+                schedule['Пн-Пт'] = '9:00-18:00';
+                schedule['Сб'] = '10:00-17:00';
+                schedule['Вс'] = 'Выходной';
+            }
+
+            return schedule;
+        };
+
+        const getRegionName = (regionId) => {
+            const region = regions.find(r => r.region_id === regionId);
+            return region ? region.region_name : 'Не указан';
+        };
+
+
+        return {
+            id: masterData.id,
+            name: masterData.name || 'Не указано',
+            avatar: masterData.avatar || null,
+            rating: 4.5, // Default rating as API doesn't provide this
+            reviewsCount: 0, // Default as API doesn't provide this
+            installations: 0, // Default as API doesn't provide this
+            region: getRegionName(masterData.region),
+            experience: masterData.experience || 'Не указан',
+            specialization: masterData.specialization ?
+                masterData.specialization.split(',').map(s => s.trim()) :
+                ['Установка сигнализаций', 'Настройка систем'],
+            responseTime: masterData.responsetime || '1 час',
+            badges: [
+                { id: 'certified', name: t('masterDetail.badges.certified'), icon: Shield }
+            ],
+            schedule: parseSchedule(masterData.schedule),
+            phone: masterData.phone ? `+998 ${masterData.phone}` : 'Не указан',
+            about: 'Профессиональный установщик автосигнализаций с большим опытом работы.',
+            services: [
+                {
+                    id: 1,
+                    name: 'Установка Pandora DX-91',
+                    price: 50,
+                    time: '2 часа',
+                    description: 'Базовая установка с настройкой всех функций'
+                },
+                {
+                    id: 2,
+                    name: 'Установка Pandora DX-4GS',
+                    price: 70,
+                    time: '2.5 часа',
+                    description: 'Установка с подключением GSM модуля и настройкой приложения'
+                }
+            ],
+            gallery: [], // Empty by default as API doesn't provide gallery
+            stats: {
+                satisfaction: 95,
+                onTime: 90,
+                warranty: 100,
+                repeatClients: 80
+            },
+            reviews: [], // Empty by default as API doesn't provide reviews
+            certificates: []
+        };
+    };
+
     const fetchMaster = async () => {
-      try {
-        setLoading(true)
-        
-        // Временная имитация API запроса
-        await new Promise(resolve => setTimeout(resolve, 500))
-        
-        // База данных мастеров
-        const mastersDB = {
-          'aleksey-kirillov': {
-            id: 'aleksey-kirillov',
-            name: 'Алексей Кириллов',
-            avatar: null, // URL фото будет здесь
-            rating: 4.8,
-            reviewsCount: 156,
-            installations: 483,
-            region: 'Ташкент',
-            experience: '8 лет',
-            specialization: ['Премиум системы', 'GSM модули', 'Сложные установки'],
-            responseTime: '30 мин',
-            badges: [
-              { id: 'top', name: t('masterDetail.badges.topMaster'), icon: Award },
-              { id: 'fast', name: t('masterDetail.badges.fastInstall'), icon: Zap },
-              { id: 'certified', name: t('masterDetail.badges.certified'), icon: Shield }
-            ],
-            schedule: {
-              'Пн-Пт': '9:00-19:00',
-              'Сб': '10:00-17:00',
-              'Вс': 'Выходной'
-            },
-            phone: '+998 90 123 45 67',
-            about: 'Профессиональный установщик с большим опытом работы. Специализируюсь на премиальных системах Pandora. Работаю с любыми автомобилями, включая редкие модели.',
-            services: [
-              { 
-                id: 1,
-                name: 'Установка Pandora DX-91', 
-                price: 50, 
-                time: '2 часа',
-                description: 'Базовая установка с настройкой всех функций'
-              },
-              { 
-                id: 2,
-                name: 'Установка Pandora DX-4GS', 
-                price: 70, 
-                time: '2.5 часа',
-                description: 'Установка с подключением GSM модуля и настройкой приложения'
-              },
-              { 
-                id: 3,
-                name: 'Установка Pandora DXL-5000', 
-                price: 100, 
-                time: '3 часа',
-                description: 'Премиальная установка с полной интеграцией'
-              }
-            ],
-            gallery: [
-              { id: 1, url: null, description: 'Установка на Toyota Camry' },
-              { id: 2, url: null, description: 'Работа с проводкой' },
-              { id: 3, url: null, description: 'Настройка системы' },
-              { id: 4, url: null, description: 'Готовая работа' }
-            ],
-            stats: {
-              satisfaction: 98,
-              onTime: 95,
-              warranty: 100,
-              repeatClients: 87
-            },
-            reviews: [
-              {
-                id: 1,
-                user: 'Андрей П.',
-                avatar: null,
-                rating: 5,
-                date: '20.05.2025',
-                text: 'Отличный мастер! Установил сигнализацию быстро и качественно. Все объяснил, показал как пользоваться.',
-                product: 'Pandora DX-91',
-                verified: true
-              },
-              {
-                id: 2,
-                user: 'Мария С.',
-                avatar: null,
-                rating: 5,
-                date: '15.05.2025',
-                text: 'Профессионал своего дела. Работа выполнена аккуратно, провода спрятаны. Рекомендую!',
-                product: 'Pandora DX-4GS',
-                verified: true
-              },
-              {
-                id: 3,
-                user: 'Виктор К.',
-                avatar: null,
-                rating: 4,
-                date: '10.05.2025',
-                text: 'Хорошая работа, но пришлось немного подождать из-за загруженности мастера.',
-                product: 'Pandora DXL-5000',
-                verified: true
-              }
-            ],
-            certificates: [
-              { id: 1, name: 'Сертификат Pandora', year: '2023' },
-              { id: 2, name: 'Повышение квалификации', year: '2024' }
-            ]
-          },
-          'sergey-mihaylov': {
-            id: 'sergey-mihaylov',
-            name: 'Сергей Михайлов',
-            avatar: null,
-            rating: 4.9,
-            reviewsCount: 142,
-            installations: 392,
-            region: 'Ташкент',
-            experience: '6 лет',
-            specialization: ['Все типы систем', 'Экспресс-установка'],
-            responseTime: '15 мин',
-            badges: [
-              { id: 'certified', name: t('masterDetail.badges.certified'), icon: Shield },
-              { id: 'rating', name: t('masterDetail.badges.highRating'), icon: Star }
-            ],
-            schedule: {
-              'Пн-Сб': '8:00-20:00',
-              'Вс': '10:00-18:00'
-            },
-            phone: '+998 90 987 65 43',
-            about: 'Устанавливаю все типы сигнализаций Pandora. Работаю быстро и качественно. Гарантия на все работы.',
-            services: [
-              { 
-                id: 1,
-                name: 'Установка Pandora DX-91', 
-                price: 45, 
-                time: '1.5 часа',
-                description: 'Быстрая установка с гарантией'
-              },
-              { 
-                id: 2,
-                name: 'Установка Pandora DX-4GS', 
-                price: 65, 
-                time: '2 часа',
-                description: 'Установка с настройкой всех функций'
-              }
-            ],
-            gallery: [],
-            stats: {
-              satisfaction: 99,
-              onTime: 98,
-              warranty: 100,
-              repeatClients: 92
-            },
-            reviews: [
-              {
-                id: 4,
-                user: 'Олег Д.',
-                avatar: null,
-                rating: 5,
-                date: '22.05.2025',
-                text: 'Мастер знает свое дело! Установка прошла быстро, все работает отлично.',
-                product: 'Pandora DX-91',
-                verified: true
-              }
-            ],
-            certificates: [
-              { id: 1, name: 'Сертификат Pandora', year: '2024' }
-            ]
-          }
+        try {
+            setLoading(true);
+            const response = await axios.post('/api/get-master-info', {
+                locale: currentLocale,
+                id: params.id
+            });
+
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const transformedData = transformMasterData(response.data);
+
+            if (!transformedData) {
+                throw new Error('Master not found');
+            }
+
+            setMaster(transformedData);
+            setError(null);
+        } catch (error) {
+            console.error('Error fetching master:', error);
+            setError(error.message || 'Failed to load master information');
+        } finally {
+            setLoading(false);
         }
-        
-        const masterData = mastersDB[params.id]
-        
-        if (!masterData) {
-          throw new Error('Мастер не найден')
+    };
+
+    useEffect(() => {
+        if (params.id) {
+            fetchMaster();
         }
-        
-        setMaster(masterData)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    fetchMaster()
-  }, [params.id])
+    }, [params.id, currentLocale]);
+
+  const mastersDB = {
+    'aleksey-kirillov': {
+      id: 'aleksey-kirillov',
+      name: 'Алексей Кириллов',
+      avatar: null, // URL фото будет здесь
+      rating: 4.8,
+      reviewsCount: 156,
+      installations: 483,
+      region: 'Ташкент',
+      experience: '8 лет',
+      specialization: ['Премиум системы', 'GSM модули', 'Сложные установки'],
+      responseTime: '30 мин',
+      badges: [
+        { id: 'top', name: t('masterDetail.badges.topMaster'), icon: Award },
+        { id: 'fast', name: t('masterDetail.badges.fastInstall'), icon: Zap },
+        { id: 'certified', name: t('masterDetail.badges.certified'), icon: Shield }
+      ],
+      schedule: {
+        'Пн-Пт': '9:00-19:00',
+        'Сб': '10:00-17:00',
+        'Вс': 'Выходной'
+      },
+      phone: '+998 90 123 45 67',
+      about: 'Профессиональный установщик с большим опытом работы. Специализируюсь на премиальных системах Pandora. Работаю с любыми автомобилями, включая редкие модели.',
+      services: [
+        {
+          id: 1,
+          name: 'Установка Pandora DX-91',
+          price: 50,
+          time: '2 часа',
+          description: 'Базовая установка с настройкой всех функций'
+        },
+        {
+          id: 2,
+          name: 'Установка Pandora DX-4GS',
+          price: 70,
+          time: '2.5 часа',
+          description: 'Установка с подключением GSM модуля и настройкой приложения'
+        },
+        {
+          id: 3,
+          name: 'Установка Pandora DXL-5000',
+          price: 100,
+          time: '3 часа',
+          description: 'Премиальная установка с полной интеграцией'
+        }
+      ],
+      gallery: [
+        { id: 1, url: null, description: 'Установка на Toyota Camry' },
+        { id: 2, url: null, description: 'Работа с проводкой' },
+        { id: 3, url: null, description: 'Настройка системы' },
+        { id: 4, url: null, description: 'Готовая работа' }
+      ],
+      stats: {
+        satisfaction: 98,
+        onTime: 95,
+        warranty: 100,
+        repeatClients: 87
+      },
+      reviews: [
+        {
+          id: 1,
+          user: 'Андрей П.',
+          avatar: null,
+          rating: 5,
+          date: '20.05.2025',
+          text: 'Отличный мастер! Установил сигнализацию быстро и качественно. Все объяснил, показал как пользоваться.',
+          product: 'Pandora DX-91',
+          verified: true
+        },
+        {
+          id: 2,
+          user: 'Мария С.',
+          avatar: null,
+          rating: 5,
+          date: '15.05.2025',
+          text: 'Профессионал своего дела. Работа выполнена аккуратно, провода спрятаны. Рекомендую!',
+          product: 'Pandora DX-4GS',
+          verified: true
+        },
+        {
+          id: 3,
+          user: 'Виктор К.',
+          avatar: null,
+          rating: 4,
+          date: '10.05.2025',
+          text: 'Хорошая работа, но пришлось немного подождать из-за загруженности мастера.',
+          product: 'Pandora DXL-5000',
+          verified: true
+        }
+      ],
+      certificates: [
+        { id: 1, name: 'Сертификат Pandora', year: '2023' },
+        { id: 2, name: 'Повышение квалификации', year: '2024' }
+      ]
+    },
+  }
   
   // Инициализация карты
   useEffect(() => {
@@ -298,7 +355,7 @@ export default function MasterDetailPage() {
                 <div className="w-32 h-32 bg-gray-900 border border-gray-800 flex items-center justify-center flex-shrink-0">
                   {master.avatar ? (
                     <img 
-                      src={master.avatar} 
+                      src={`${mainUrl}/${master.avatar}`}
                       alt={master.name}
                       className="w-full h-full object-cover"
                     />

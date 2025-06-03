@@ -23,41 +23,81 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '../hooks/useTranslation'
 import { homeLocales } from './home'
+import {useLanguageStore} from "@/src/store/language";
+import axios from "axios";
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [slides, setSlides] = useState([])
+  const [stats, setStats] = useState([])
   const { scrollY } = useScroll()
   const { t } = useTranslation(homeLocales)
+  const {currentLocale} = useLanguageStore()
 
   const y = useTransform(scrollY, [0, 300], [0, 50])
   const opacity = useTransform(scrollY, [0, 300], [1, 0.8])
 
-  const slides = [
-    {
-      title: t('hero.slide1.title'),
-      subtitle: t('hero.slide1.subtitle'),
-      description: t('hero.slide1.description'),
-      price: t('hero.slide1.price'),
-      icon: Lock,
-      gradient: 'from-gray-900 via-gray-800 to-black'
-    },
-    {
-      title: t('hero.slide2.title'),
-      subtitle: t('hero.slide2.subtitle'),
-      description: t('hero.slide2.description'),
-      price: t('hero.slide2.price'),
-      icon: Smartphone,
-      gradient: 'from-gray-800 via-gray-900 to-black'
-    },
-    {
-      title: t('hero.slide3.title'),
-      subtitle: t('hero.slide3.subtitle'),
-      description: t('hero.slide3.description'),
-      price: t('hero.slide3.price'),
-      icon: Zap,
-      gradient: 'from-black via-gray-900 to-gray-800'
+
+
+
+  // const slides = [
+  //   {
+  //     title: t('hero.slide1.title'),
+  //     subtitle: t('hero.slide1.subtitle'),
+  //     description: t('hero.slide1.description'),
+  //     price: t('hero.slide1.price'),
+  //     icon: Lock,
+  //     gradient: 'from-gray-900 via-gray-800 to-black'
+  //   },
+  //   {
+  //     title: t('hero.slide2.title'),
+  //     subtitle: t('hero.slide2.subtitle'),
+  //     description: t('hero.slide2.description'),
+  //     price: t('hero.slide2.price'),
+  //     icon: Smartphone,
+  //     gradient: 'from-gray-800 via-gray-900 to-black'
+  //   },
+  //   {
+  //     title: t('hero.slide3.title'),
+  //     subtitle: t('hero.slide3.subtitle'),
+  //     description: t('hero.slide3.description'),
+  //     price: t('hero.slide3.price'),
+  //     icon: Zap,
+  //     gradient: 'from-black via-gray-900 to-gray-800'
+  //   }
+  // ]
+
+    useEffect(() => {
+        fetchSliders()
+        fetchStats()
+    }, [currentLocale]);
+
+    const fetchSliders = async () => {
+        try {
+            const response = await axios.post('/api/get-hero-slide', { locale: currentLocale });
+            if (response.status !== 200) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+          setSlides(response.data);
+            console.log()
+        } catch (error) {
+            console.error('Error fetching hero section:', error);
+        }
+    };
+
+  const fetchStats = async () => {
+    try {
+      const response = await axios.post('/api/get-static-info', { locale: currentLocale });
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setStats(response.data);
+      console.log()
+    } catch (error) {
+      console.error('Error fetching hero section:', error);
     }
-  ]
+  };
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -99,12 +139,12 @@ export default function HomePage() {
     }
   ]
 
-  const stats = [
-    { value: '15,000+', label: t('stats.installations') },
-    { value: '98%', label: t('stats.clients') },
-    { value: '50+', label: t('stats.masters') },
-    { value: '12', label: t('stats.experience') }
-  ]
+  // const stats = [
+  //   { value: '15,000+', label: t('stats.installations') },
+  //   { value: '98%', label: t('stats.clients') },
+  //   { value: '50+', label: t('stats.masters') },
+  //   { value: '12', label: t('stats.experience') }
+  // ]
 
   // Инициализация карты
   useEffect(() => {
@@ -146,12 +186,26 @@ export default function HomePage() {
     }
   }, [])
 
+
+  if (!slides || slides.length === 0) {
+    return (
+        <section className="relative min-h-screen overflow-hidden flex items-center justify-center">
+          <div className="text-white">Loading...</div>
+        </section>
+    );
+  }
+
+  const validCurrentSlide = currentSlide >= 0 && currentSlide < slides.length ? currentSlide : 0;
+  const currentSlideData = slides[validCurrentSlide];
+
   return (
     <div className="bg-black">
       {/* Hero Section */}
       <section className="relative min-h-screen overflow-hidden">
         <motion.div style={{ y, opacity }} className="absolute inset-0">
-          <div className={`absolute inset-0 bg-gradient-to-br ${slides[currentSlide].gradient} transition-all duration-1000`} />
+          {currentSlideData && (
+              <div className={`absolute inset-0 bg-gradient-to-br ${currentSlideData.gradient} transition-all duration-1000`} />
+          )}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
           {/* Синее свечение */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.03)_0%,transparent_50%)]" />
@@ -167,16 +221,16 @@ export default function HomePage() {
                 transition={{ duration: 0.7 }}
               >
                 <h1 className="text-5xl lg:text-7xl font-thin text-white mb-6 leading-tight">
-                  {slides[currentSlide].title}
+                  {currentSlideData.title}
                 </h1>
                 <p className="text-2xl lg:text-3xl text-gray-300 font-light mb-4">
-                  {slides[currentSlide].subtitle}
+                  {currentSlideData.subtitle}
                 </p>
                 <p className="text-lg text-gray-400 mb-8 font-light">
-                  {slides[currentSlide].description}
+                  {currentSlideData.description}
                 </p>
                 <div className="text-3xl text-white mb-10 font-light">
-                  {slides[currentSlide].price}
+                  {currentSlideData.price}
                 </div>
                 <Link
                   href="/products"

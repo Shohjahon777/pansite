@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  Filter, 
-  ChevronRight, 
-  Check, 
+import {
+  Filter,
+  ChevronRight,
+  Check,
   ArrowRight,
   Cpu,
   Smartphone,
@@ -15,14 +15,37 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '../../hooks/useTranslation'
 import { productsLocales } from './products'
+import { FilterDropdown } from '@/src/components/FilterDropdown'
+import { useLanguageStore } from '@/src/store/language'
+import axios from 'axios'
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [filters, setFilters] = useState([])
   const [compareList, setCompareList] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [showComparison, setShowComparison] = useState(false)
   const { t } = useTranslation(productsLocales)
-  
+
+  const {currentLocale} = useLanguageStore()
+
+  useEffect(() => {
+    fetchFilters()
+  }, [currentLocale]);
+
+  const fetchFilters = async () => {
+    try {
+      const response = await axios.post('/api/get-model-types', { locale: currentLocale });
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setFilters(response.data);
+      console.log()
+    } catch (error) {
+      console.error('Error fetching filters:', error);
+    }
+  };
+
   const products = [
     {
       id: 'dx91',
@@ -82,21 +105,21 @@ export default function ProductsPage() {
       compatibility: '100%'
     }
   ]
-  
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
+
+  const filteredProducts = selectedCategory === 'all'
+    ? products
     : products.filter(p => p.category === selectedCategory)
-  
+
   const [formData, setFormData] = useState({
     name: '', phone: '', car: '', comment: '', product: ''
   })
-  
+
   const handleSubmit = (e) => {
     e.preventDefault()
     setShowModal(false)
     setFormData({ name: '', phone: '', car: '', comment: '', product: '' })
   }
-  
+
   return (
     <div className="page-container min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 py-16">
@@ -112,10 +135,10 @@ export default function ProductsPage() {
             {t('products.subtitle')}
           </p>
         </motion.div>
-        
+
         {/* Filters */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex border border-gray-800 p-1">
+          {/* <div className="inline-flex border border-gray-800 p-1">
             {[
               { value: 'all', label: t('products.filters.all') },
               { value: 'standard', label: t('products.filters.standard') },
@@ -134,9 +157,33 @@ export default function ProductsPage() {
                 {filter.label}
               </button>
             ))}
-          </div>
+          </div> */}
+
+          <FilterDropdown
+            // filters={[
+            //   { value: 'all', label: 'Все системы' },
+            //   { value: 'standard', label: 'Стандарт' },
+            //   { value: 'gsm', label: 'С GSM' },
+            //   { value: 'premium', label: 'Премиум' },
+            //   { value: 'bluetooth', label: 'Bluetooth' },
+            //   { value: 'smartphone', label: 'Smartphone интеграция' },
+            //   { value: 'gps', label: 'GPS трекинг' },
+            //   { value: 'canbus', label: 'CAN-BUS' },
+            //   { value: 'keyless', label: 'Бесключевой обход' },
+            //   { value: 'turbo', label: 'Турбо-таймер' },
+            //   { value: 'autostart', label: 'Автозапуск' },
+            //   { value: 'remote', label: 'Дальняя связь' },
+            //   { value: 'security', label: 'Повышенная безопасность' },
+            //   { value: 'economy', label: 'Эконом класс' },
+            //   { value: 'professional', label: 'Профессиональные' }
+            // ]}
+            filters={filters}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            t={t}
+          />
         </div>
-        
+
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {filteredProducts.map((product, i) => (
@@ -154,7 +201,7 @@ export default function ProductsPage() {
                   </span>
                 </div>
               )}
-              
+
               <div className="bg-gray-950 border border-gray-800 h-full hover:border-gray-700 transition-all">
                 <Link href={`/products/${product.id}`}>
                   <div className="p-8 border-b border-gray-800">
@@ -166,13 +213,13 @@ export default function ProductsPage() {
                     </div>
                   </div>
                 </Link>
-                
+
                 <div className="p-8">
                   <div className="mb-6">
                     <div className="text-3xl font-thin text-white">${product.price}</div>
                     <div className="text-sm text-gray-500">{t('products.or')} ${product.monthly}/{t('products.month')}</div>
                   </div>
-                  
+
                   <div className="space-y-2 mb-6">
                     {product.features.slice(0, 3).map((feature, j) => (
                       <div key={j} className="flex items-start gap-2 text-sm text-gray-400">
@@ -184,20 +231,20 @@ export default function ProductsPage() {
                       +{product.features.length - 3} {t('products.moreFeatures')}
                     </div>
                   </div>
-                  
+
                   <div className="mb-6">
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-gray-500">{t('products.compatibility')}</span>
                       <span className="text-gray-400">{product.compatibility}</span>
                     </div>
                     <div className="w-full bg-gray-900 h-1">
-                      <div 
+                      <div
                         className="h-full bg-gradient-to-r from-gray-700 to-gray-600"
                         style={{ width: product.compatibility }}
                       />
                     </div>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <button
                       onClick={() => {
@@ -208,7 +255,7 @@ export default function ProductsPage() {
                     >
                       {t('products.orderInstallation')}
                     </button>
-                    <Link 
+                    <Link
                       href={`/products/${product.id}`}
                       className="w-full border border-gray-700 text-gray-300 py-3 hover:bg-gray-900 hover:text-white transition-all text-sm font-light flex items-center justify-center gap-2 group"
                     >
@@ -223,14 +270,13 @@ export default function ProductsPage() {
                           setCompareList([...compareList, product.id])
                         }
                       }}
-                      className={`w-full py-3 text-sm font-light transition-all ${
-                        compareList.includes(product.id)
-                          ? 'bg-gray-900 text-white border border-gray-700'
-                          : 'border border-gray-800 text-gray-500 hover:text-white hover:border-gray-700'
-                      }`}
+                      className={`w-full py-3 text-sm font-light transition-all ${compareList.includes(product.id)
+                        ? 'bg-gray-900 text-white border border-gray-700'
+                        : 'border border-gray-800 text-gray-500 hover:text-white hover:border-gray-700'
+                        }`}
                     >
-                      {compareList.includes(product.id) 
-                        ? t('products.inComparison') 
+                      {compareList.includes(product.id)
+                        ? t('products.inComparison')
                         : t('products.compare')
                       }
                     </button>
@@ -240,7 +286,7 @@ export default function ProductsPage() {
             </motion.div>
           ))}
         </div>
-        
+
         {/* Compare Button */}
         {compareList.length > 1 && (
           <motion.div
@@ -257,7 +303,7 @@ export default function ProductsPage() {
           </motion.div>
         )}
       </div>
-      
+
       {/* Order Modal */}
       <AnimatePresence>
         {showModal && (
@@ -284,7 +330,7 @@ export default function ProductsPage() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                   type="text"
@@ -292,7 +338,7 @@ export default function ProductsPage() {
                   required
                   className="w-full px-4 py-3 bg-black border border-gray-800 text-white placeholder-gray-600 focus:border-gray-700 focus:outline-none transition-colors"
                   value={formData.name}
-                  onChange={e => setFormData({...formData, name: e.target.value})}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                 />
                 <input
                   type="tel"
@@ -300,7 +346,7 @@ export default function ProductsPage() {
                   required
                   className="w-full px-4 py-3 bg-black border border-gray-800 text-white placeholder-gray-600 focus:border-gray-700 focus:outline-none transition-colors"
                   value={formData.phone}
-                  onChange={e => setFormData({...formData, phone: e.target.value})}
+                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
                 />
                 <input
                   type="text"
@@ -308,14 +354,14 @@ export default function ProductsPage() {
                   required
                   className="w-full px-4 py-3 bg-black border border-gray-800 text-white placeholder-gray-600 focus:border-gray-700 focus:outline-none transition-colors"
                   value={formData.car}
-                  onChange={e => setFormData({...formData, car: e.target.value})}
+                  onChange={e => setFormData({ ...formData, car: e.target.value })}
                 />
                 <textarea
                   placeholder={t('products.form.comment')}
                   rows="3"
                   className="w-full px-4 py-3 bg-black border border-gray-800 text-white placeholder-gray-600 focus:border-gray-700 focus:outline-none transition-colors resize-none"
                   value={formData.comment}
-                  onChange={e => setFormData({...formData, comment: e.target.value})}
+                  onChange={e => setFormData({ ...formData, comment: e.target.value })}
                 />
                 <button
                   type="submit"

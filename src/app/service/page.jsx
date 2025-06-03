@@ -19,59 +19,128 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '../../hooks/useTranslation'
 import { serviceLocales } from './service'
+import {useLanguageStore} from "@/src/store/language";
+import axios from "axios";
 
 export default function ServicePage() {
   const [activeTab, setActiveTab] = useState('masters')
   const [selectedRegion, setSelectedRegion] = useState('all')
   const [selectedMaster, setSelectedMaster] = useState(null)
   const [showBooking, setShowBooking] = useState(false)
+  const [dealers, setDealers] = useState([])
+  const [masters, setMasters] = useState([])
+  const [regions, setRegions] = useState([])
   const { t } = useTranslation(serviceLocales)
-  
-  const masters = [
-    {
-      id: 'aleksey-kirillov',
-      name: 'Алексей Кириллов',
-      avatar: null, // Здесь будет URL фото
-      rating: 4.8,
-      reviewsCount: 156,
-      installations: 483,
-      region: 'Ташкент',
-      experience: '8 лет',
-      specialization: ['Премиум системы', 'GSM модули'],
-      responseTime: '30 мин',
-      badges: ['top', 'fast'],
-      schedule: ['Пн-Пт: 9:00-19:00', 'Сб: 10:00-17:00'],
-      phone: '+998 90 123 45 67'
-    },
-    {
-      id: 'sergey-mihaylov',
-      name: 'Сергей Михайлов',
-      avatar: null, // Здесь будет URL фото
-      rating: 4.9,
-      reviewsCount: 142,
-      installations: 392,
-      region: 'Ташкент',
-      experience: '6 лет',
-      specialization: ['Все типы систем'],
-      responseTime: '15 мин',
-      badges: ['certified'],
-      schedule: ['Пн-Сб: 8:00-20:00'],
-      phone: '+998 90 987 65 43'
+  const {currentLocale} = useLanguageStore()
+
+
+
+
+  // {
+  //   "name": "G'iyosiddin To'xtamurodov",
+  //     "phone": "939692207",
+  //     "experience": "5",
+  //     "specialization": "Установка",
+  //     "region_name": "Toshkent shahar",
+  //     "responsetime": "30",
+  //     "img": "/b/core/m$load_image?sha=",
+  //     "id": "13",
+  //     "schedule": [
+  //   "Пн,Вт,Ср,Чт,Пт,Сб: 09:00-18:00",
+  //   "Вс: 10:00-22:00"
+  // ]
+  // },
+
+
+  // const masters = [
+  //   {
+  //     id: 'aleksey-kirillov',
+  //     name: 'Алексей Кириллов',
+  //     avatar: null, // З
+  //     rating: 4.8,
+  //     reviewsCount: 156,
+  //     installations: 483,
+  //     region: 'Ташкент',
+  //     experience: '8 лет',
+  //     specialization: ['Премиум системы', 'GSM модули'],
+  //     responseTime: '30 мин',
+  //     badges: ['top', 'fast'],
+  //     schedule: ['Пн-Пт: 9:00-19:00', 'Сб: 10:00-17:00'],
+  //     phone: '+998 90 123 45 67'
+  //   },
+  //   {
+  //     id: 'sergey-mihaylov',
+  //     name: 'Сергей Михайлов',
+  //     avatar: null, // Здесь будет URL фото
+  //     rating: 4.9,
+  //     reviewsCount: 142,
+  //     installations: 392,
+  //     region: 'Ташкент',
+  //     experience: '6 лет',
+  //     specialization: ['Все типы систем'],
+  //     responseTime: '15 мин',
+  //     badges: ['certified'],
+  //     schedule: ['Пн-Сб: 8:00-20:00'],
+  //     phone: '+998 90 987 65 43'
+  //   }
+  // ]
+
+  useEffect(() => {
+     fetchDealers()
+     fetchMasters()
+     fetchRegions()
+  }, [currentLocale]);
+
+  const fetchDealers = async () => {
+    try {
+      const response = await axios.post('/api/get-dealers', { locale: currentLocale, filial_id: 3630393 });
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setDealers(response.data);
+      console.log()
+    } catch (error) {
+      console.error('Error fetching dealers:', error);
     }
-  ]
-  
-  const dealers = [
-    {
-      id: 1,
-      name: 'АвтоПро Центр',
-      rating: 4.8,
-      reviewsCount: 234,
-      address: 'Ташкент, ул. Амира Темура, 12',
-      phone: '+998 71 123 45 67',
-      workHours: 'Пн-Сб: 9:00-19:00',
-      services: ['Установка', 'Гарантийное обслуживание', 'Диагностика']
+  };
+
+
+  const fetchMasters = async () => {
+    try {
+      const response = await axios.post('/api/get-masters', { locale: currentLocale, filial_id: 3630393 });
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setMasters(response.data);
+    } catch (error) {
+      console.error('Error fetching masters:', error);
     }
-  ]
+  };
+
+  const fetchRegions = async () => {
+    try {
+      const response = await axios.post('/api/get-regions', { locale: currentLocale});
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setRegions(response.data);
+    } catch (error) {
+      console.error('Error fetching regions:', error);
+    }
+  };
+  
+  // const dealers = [
+  //   {
+  //     id: 1,
+  //     name: 'АвтоПро Центр',
+  //     rating: 4.8,
+  //     reviewsCount: 234,
+  //     address: 'Ташкент, ул. Амира Темура, 12',
+  //     phone: '+998 71 123 45 67',
+  //     workHours: 'Пн-Сб: 9:00-19:00',
+  //     services: ['Установка', 'Гарантийное обслуживание', 'Диагностика']
+  //   }
+  // ]
   
   const filteredMasters = selectedRegion === 'all' 
     ? masters 
@@ -180,22 +249,24 @@ export default function ServicePage() {
         </div>
         
         {/* Region Filter */}
-        {activeTab !== 'map' && (
-          <div className="flex justify-center mb-8">
-            <select
-              value={selectedRegion}
-              onChange={e => setSelectedRegion(e.target.value)}
-              className="px-6 py-2 bg-gray-950 border border-gray-800 text-gray-300 focus:border-gray-700 focus:outline-none"
-            >
-              <option value="all">{t('service.regions.all')}</option>
-              <option value="Ташкент">{t('service.regions.tashkent')}</option>
-              <option value="Самарканд">{t('service.regions.samarkand')}</option>
-              <option value="Бухара">{t('service.regions.bukhara')}</option>
-            </select>
-          </div>
-        )}
-        
-        {/* Masters List */}
+          {activeTab !== 'map' && (
+              <div className="flex justify-center mb-8">
+                  <select
+                      value={selectedRegion}
+                      onChange={e => setSelectedRegion(e.target.value)}
+                      className="px-6 py-2 bg-gray-950 border border-gray-800 text-gray-300 focus:border-gray-700 focus:outline-none"
+                  >
+                      {regions.map(region => (
+                          <option key={region.region_id} value={region.region_id}>
+                              {region.region_name}
+                          </option>
+                      ))}
+                  </select>
+              </div>
+          )}
+
+
+          {/* Masters List */}
         {activeTab === 'masters' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredMasters.map((master, i) => (
@@ -237,23 +308,23 @@ export default function ServicePage() {
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {master.badges.includes('top') && (
-                      <span className="text-xs px-3 py-1 border border-gray-700 text-gray-400">
-                        {t('service.badges.topMaster')}
-                      </span>
-                    )}
-                    {master.badges.includes('fast') && (
-                      <span className="text-xs px-3 py-1 border border-gray-700 text-gray-400">
-                        {t('service.badges.fastInstall')}
-                      </span>
-                    )}
-                    {master.badges.includes('certified') && (
-                      <span className="text-xs px-3 py-1 border border-gray-700 text-gray-400">
-                        {t('service.badges.certified')}
-                      </span>
-                    )}
-                  </div>
+                  {/*<div className="flex flex-wrap gap-2 mb-4">*/}
+                  {/*  {master.badges.includes('top') && (*/}
+                  {/*    <span className="text-xs px-3 py-1 border border-gray-700 text-gray-400">*/}
+                  {/*      {t('service.badges.topMaster')}*/}
+                  {/*    </span>*/}
+                  {/*  )}*/}
+                  {/*  {master.badges.includes('fast') && (*/}
+                  {/*    <span className="text-xs px-3 py-1 border border-gray-700 text-gray-400">*/}
+                  {/*      {t('service.badges.fastInstall')}*/}
+                  {/*    </span>*/}
+                  {/*  )}*/}
+                  {/*  {master.badges.includes('certified') && (*/}
+                  {/*    <span className="text-xs px-3 py-1 border border-gray-700 text-gray-400">*/}
+                  {/*      {t('service.badges.certified')}*/}
+                  {/*    </span>*/}
+                  {/*  )}*/}
+                  {/*</div>*/}
                   
                   <div className="space-y-3 mb-6 text-sm">
                     <div className="flex justify-between">
@@ -273,11 +344,9 @@ export default function ServicePage() {
                   <div className="mb-4">
                     <p className="text-xs text-gray-500 mb-2">Специализация:</p>
                     <div className="flex flex-wrap gap-1">
-                      {master.specialization.map((spec, j) => (
-                        <span key={j} className="text-xs px-2 py-1 bg-gray-900 text-gray-400">
-                          {spec}
+                        <span className="text-xs px-2 py-1 bg-gray-900 text-gray-400">
+                          {master.specialization}
                         </span>
-                      ))}
                     </div>
                   </div>
                   
@@ -309,7 +378,7 @@ export default function ServicePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {dealers.map((dealer, i) => (
               <motion.div
-                key={dealer.id}
+                key={dealer.dealer_id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
@@ -334,26 +403,26 @@ export default function ServicePage() {
                     <Phone className="w-4 h-4" />
                     <span>{dealer.phone}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <Clock className="w-4 h-4" />
-                    <span>{dealer.workHours}</span>
-                  </div>
+                  {/*<div className="flex items-center gap-2 text-gray-400">*/}
+                  {/*  <Clock className="w-4 h-4" />*/}
+                  {/*  <span>{dealer.workHours}</span>*/}
+                  {/*</div>*/}
                   <div className="flex items-center gap-2 text-gray-400">
                     <MapPin className="w-4 h-4" />
                     <span className="text-xs">{dealer.address}</span>
                   </div>
                 </div>
                 
-                <div className="mb-6">
-                  <p className="text-sm text-gray-500 mb-2">{t('service.services')}:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {dealer.services.map((service, j) => (
-                      <span key={j} className="text-xs px-2 py-1 bg-gray-900 text-gray-400">
-                        {service}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                {/*<div className="mb-6">*/}
+                {/*  <p className="text-sm text-gray-500 mb-2">{t('service.services')}:</p>*/}
+                {/*  <div className="flex flex-wrap gap-1">*/}
+                {/*    {dealer.services.map((service, j) => (*/}
+                {/*      <span key={j} className="text-xs px-2 py-1 bg-gray-900 text-gray-400">*/}
+                {/*        {service}*/}
+                {/*      </span>*/}
+                {/*    ))}*/}
+                {/*  </div>*/}
+                {/*</div>*/}
                 
                 <div className="flex gap-2">
                   <button className="flex-1 bg-white text-black py-2 hover:bg-gray-100 transition-colors text-sm font-medium">

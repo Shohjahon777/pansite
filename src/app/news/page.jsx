@@ -36,7 +36,6 @@ export default function NewsPage() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const { t } = useTranslation(newsLocales)
   const {currentLocale} = useLanguageStore()
-  const mainUrl = process.env.NEXT_PUBLIC_API_URL
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -573,7 +572,7 @@ export default function NewsPage() {
                     <div className={`${viewMode === 'list' ? 'h-full' : 'aspect-video'} bg-gray-900 border-b border-gray-800 flex items-center justify-center relative overflow-hidden`}>
                       {item.image ? (
                           <img
-                              src={`${mainUrl}/b/core/m$load_image?sha=${item.image}`} // or your image path
+                              src={`b/core/m$load_image?sha=${item.image}`} // or your image path
                               alt={item.title}
                               className="w-full h-full object-cover"
                           />

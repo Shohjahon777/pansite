@@ -42,7 +42,6 @@ export default function MasterDetailPage() {
     // const [mastersDB, setMastersDB] = useState([])
   const { t } = useTranslation(masterDetailLocales)
   const {currentLocale} = useLanguageStore()
-  const mainUrl = process.env.NEXT_PUBLIC_API_URL
 
 
     const fetchRegions = async () => {
@@ -355,7 +354,7 @@ export default function MasterDetailPage() {
                 <div className="w-32 h-32 bg-gray-900 border border-gray-800 flex items-center justify-center flex-shrink-0">
                   {master.avatar ? (
                     <img 
-                      src={`${mainUrl}/${master.avatar}`}
+                      src={`${master.avatar}`}
                       alt={master.name}
                       className="w-full h-full object-cover"
                     />

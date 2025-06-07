@@ -91,21 +91,21 @@ export const productDetailLocales = {
     uz: {
         productDetail: {
             breadcrumbs: {
-                home: 'Asosiy',
+                home: 'Bosh sahifa',
                 products: 'Mahsulotlar'
             },
-            reviews: 'sharhlar',
+            reviews: 'ta sharh',
             or: 'yoki',
             month: 'oy',
-            orderInstallation: "O'rnatishga buyurtma",
-            findMaster: 'Usta topish',
-            inBox: 'Komplektda',
+            orderInstallation: 'O‘rnatishni buyurtma qilish',
+            findMaster: 'Ustani topish',
+            inBox: 'To‘plamda',
             boxContents: {
                 centralUnit: 'Markaziy blok',
-                lcdRemote: 'LCD boshqaruv pulti',
-                additionalRemote: "Qo'shimcha pult",
-                sensorsAntenna: 'Sensorlar va antenna',
-                manual: "Yo'riqnoma va kafolat varaqasi"
+                lcdRemote: 'LCD pult',
+                additionalRemote: 'Qo‘shimcha pult',
+                sensorsAntenna: 'Datchiklar va antenna',
+                manual: 'Qo‘llanma va kafolat varaqasi'
             },
             tabs: {
                 features: 'Xususiyatlar',
@@ -114,12 +114,68 @@ export const productDetailLocales = {
             },
             mainFeatures: 'Asosiy funksiyalar',
             technicalSpecs: 'Texnik xususiyatlar',
-            supportedCars: "Qo'llab-quvvatlanadigan avtomobillar",
-            notFoundCar: "Avtomobilingizni topmadingizmi? Bizga qo'ng'iroq qiling, moslikni tekshiramiz!",
-            showAllReviews: 'Barcha sharhlarni ko\'rsatish',
-            noReviews: 'Sharhlarni ko\'rsatib bo\'lmaydi',
-            reviewsCount: 'sharhlarni ko\'rsatish',
-
+            supportedCars: 'Mos avtomobillar',
+            notFoundCar: 'Avtomobilingizni topa olmadingizmi? Bizga qo‘ng‘iroq qiling va mosligini tekshiramiz!',
+            showAllReviews: 'Barcha sharhlarni ko‘rsatish',
+            products: {
+                dx91: {
+                    description: 'Dialogli kod va avtomatik ishga tushirishga ega ishonchli xavfsizlik tizimi. Narx va sifatning ideal muvozanati.'
+                },
+                dx4gs: {
+                    description: 'GSM moduliga ega zamonaviy tizim. Dunyoning istalgan nuqtasidan smartfon orqali boshqarish imkoni.'
+                },
+                dxl5000: {
+                    description: 'Eng yuqori darajadagi himoya va funksionallikni taklif qiluvchi premium tizim.'
+                }
+            },
+            features: {
+                dialogCode: 'Shaxsiy shifrlash kalitiga ega dialogli kod',
+                lcdRemote: 'Aloqaga ega LCD pult',
+                range2000: 'Boshqaruv masofasi 2000 metrgacha',
+                autostart: 'Harorat, vaqt va kuchlanish bo‘yicha avtomatik ishga tushirish',
+                turboTimer: 'Turbo dvigatellar uchun turbotaymer',
+                protection: 'Kod tanlash va qayta uzatishdan himoya',
+                gsmModule: 'O‘rnatilgan GSM/GPRS moduli',
+                mobileControl: 'Mobil ilova orqali boshqaruv',
+                gpsRealtime: 'Haqiqiy vaqt rejimida GPS kuzatuvi',
+                pushNotifications: 'Hodisalar haqida push-bildirishnomalar',
+                eventsHistory: 'Sayohatlar va hodisalar tarixi',
+                cabinTemp: 'Salon haroratini nazorat qilish',
+                bluetooth5: 'Aqlli avtorizatsiya uchun Bluetooth 5.0',
+                '2canInterface': 'To‘liq integratsiya uchun 2CAN interfeys',
+                keylessBypass: 'Immobilaizerni kalitsiz chetlab o‘tish',
+                ownerRecognition: 'Egasini belgi orqali aniqlash',
+                slaveMode: 'Slave rejimida ishlash',
+                fullIntegration: 'Standart tizimlar bilan to‘liq integratsiya'
+            },
+            technical: {
+                voltage: 'Ishlash kuchlanishi',
+                consumption: 'Qo‘riqlash rejimidagi iste’mol',
+                temperature: 'Ishlash harorati oralig‘i',
+                frequency: 'Chastota',
+                zones: 'Qo‘riqlash zonalari soni',
+                channels: 'Boshqaruv kanallari soni',
+                gsmModule: 'GSM moduli',
+                builtin: 'Ichki',
+                gpsReceiver: 'GPS qabul qilgich',
+                simCard: 'Sim-karta',
+                protocols: 'Protokollar',
+                mobileApp: 'Mobil ilova',
+                interfaces: 'Interfeyslar',
+                tagRange: 'Belgi masofasi',
+                upto10m: '10 metrgacha',
+                tagsCount: 'Belgilar soni',
+                upto8: '8 tagacha',
+                encryption: 'Shifrlash'
+            },
+            compatibility: {
+                more500: 'Yana 500 dan ortiq model',
+                modernCan: 'CAN-shinali zamonaviy avtomobillar',
+                support1000: '1000 dan ortiq modellarga mos',
+                premiumAll: 'Barcha brendlarning premium avtomobillari',
+                '100percent': 'Zamonaviy avtomobillar bilan 100% moslik'
+            }
         }
     }
+
 }

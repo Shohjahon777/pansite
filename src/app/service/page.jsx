@@ -150,7 +150,7 @@ export default function ServicePage() {
   useEffect(() => {
     if (activeTab === 'map') {
       const script = document.createElement('script')
-      script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU'
+      script.src = 'https://api-maps.yandex.ru/2.1/?apikey=7689fb06-62e6-4db3-aa3d-be9373d43a89&lang=ru_RU'
       script.async = true
       script.onload = () => {
         window.ymaps.ready(() => {

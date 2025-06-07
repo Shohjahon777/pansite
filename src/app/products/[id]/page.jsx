@@ -323,7 +323,7 @@ export default function ProductDetailPage() {
 
               <div className="bg-gray-950 border border-gray-800 p-6 mb-6">
                 <div className="text-4xl font-thin text-white mb-2">${currentProduct.price}</div>
-                <p className="text-gray-500 mb-4">{t('productDetail.or')} ${Math.round(currentProduct.price/12)}/{t('productDetail.month')}</p>
+                {/*<p className="text-gray-500 mb-4">{t('productDetail.or')} ${Math.round(currentProduct.price/12)}/{t('productDetail.month')}</p>*/}
                 <button className="w-full bg-white text-black py-3 mb-2 hover:bg-gray-100 transition-colors font-medium flex items-center justify-center gap-2">
                   <ShoppingCart className="w-5 h-5" />
                   {t('productDetail.orderInstallation')}

@@ -314,18 +314,18 @@ export default function ProductsPage() {
                         )}
                       </div>
 
-                      <div className="mb-6">
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-500">{t('products.compatibility')}</span>
-                          <span className="text-gray-400">{product.compatibility}</span>
-                        </div>
-                        <div className="w-full bg-gray-900 h-1">
-                          <div
-                              className="h-full bg-gradient-to-r from-gray-700 to-gray-600"
-                              style={{ width: product.compatibility }}
-                          />
-                        </div>
-                      </div>
+                      {/*<div className="mb-6">*/}
+                      {/*  <div className="flex justify-between text-sm mb-1">*/}
+                      {/*    <span className="text-gray-500">test</span>*/}
+                      {/*    <span className="text-gray-400">{product.compatibility}</span>*/}
+                      {/*  </div>*/}
+                      {/*  <div className="w-full bg-gray-900 h-1">*/}
+                      {/*    <div*/}
+                      {/*        className="h-full bg-gradient-to-r from-gray-700 to-gray-600"*/}
+                      {/*        style={{ width: product.compatibility }}*/}
+                      {/*    />*/}
+                      {/*  </div>*/}
+                      {/*</div>*/}
 
                       <div className="space-y-3">
                         <button

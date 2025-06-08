@@ -293,12 +293,12 @@ export default function ProductsPage() {
                     </Link>
 
                     <div className="p-8">
-                      <div className="mb-6">
-                        <div className="text-3xl font-thin text-white">${product.price.toLocaleString()}</div>
-                        <div className="text-sm text-gray-500">
-                          {t('products.or')} ${product.monthly}/{t('products.month')}
-                        </div>
-                      </div>
+                      {/*<div className="mb-6">*/}
+                      {/*  <div className="text-3xl font-thin text-white">${product.price.toLocaleString()}</div>*/}
+                      {/*  <div className="text-sm text-gray-500">*/}
+                      {/*    {t('products.or')} ${product.monthly}/{t('products.month')}*/}
+                      {/*  </div>*/}
+                      {/*</div>*/}
 
                       <div className="space-y-2 mb-6">
                         {product.features.slice(0, 3).map((feature, j) => (

@@ -24,6 +24,7 @@ import {
 import { useTranslation } from '../../hooks/useTranslation'
 import { navbarLocales } from './navbarLocales'
 import { useLanguageStore } from '../../store/language'
+import axios from "axios";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -32,10 +33,45 @@ export default function Header() {
   const [showMegaMenu, setShowMegaMenu] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [contacts, setContacts] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const pathname = usePathname()
   const { t } = useTranslation(navbarLocales)
   const { currentLocale, setLocale } = useLanguageStore()
-  
+
+
+  useEffect(() => {
+    fetchContactInfo()
+  }, [currentLocale]);
+
+  const fetchContactInfo = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const response = await axios.post('/api/get-contact', {locale: currentLocale});
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+        throw new Error('Invalid or empty contact data received');
+      }
+
+      setContacts(response.data);
+    } catch (error) {
+      console.error('Error fetching contact info:', error);
+      setError(error.message)
+      setContacts([])
+    } finally {
+      setIsLoading(false)
+    }
+  };
+  const contactData = contacts.length > 0 ? contacts[0] : null
+
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0)
     window.addEventListener('scroll', handleScroll)
@@ -135,24 +171,42 @@ export default function Header() {
               className="border-b border-gray-800/50 overflow-hidden"
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-10 text-xs">
-                  <div className="flex items-center gap-6 text-gray-400">
-                    <a href="tel:+998901234567" className="flex items-center gap-1 hover:text-white transition-colors">
-                      <Phone className="w-3 h-3" />
-                      <span className="hidden sm:inline">+998 90 123 45 67</span>
-                    </a>
-                    <span className="hidden md:block">{t('nav.support24')}</span>
-                  </div>
-                  <div className="flex items-center gap-6 text-gray-400">
-                    <Link href="/promotions" className="hover:text-white transition-colors">
-                      {t('nav.currentPromotions')}
-                    </Link>
-                    <span className="hidden sm:flex items-center gap-1">
+
+                {isLoading ? (
+                    <div className="space-y-3">
+                      <div className="h-4 bg-gray-800 rounded animate-pulse"></div>
+                    </div>
+                ) : error ? (
+                    <div className="text-red-400 text-sm">
+                      Failed to load contact
+                    </div>
+                ) : contactData ? (
+                    <>
+                      <div className="flex justify-between items-center h-10 text-xs">
+                        <div className="flex items-center gap-6 text-gray-400">
+                          <a href={`tel:${contactData.phone}`} className="flex items-center gap-1 hover:text-white transition-colors">
+                            <Phone className="w-3 h-3" />
+                            <span className="hidden sm:inline">{contactData.phone}</span>
+                          </a>
+                          <span className="hidden md:block">{contactData.support_text}</span>
+                        </div>
+                        <div className="flex items-center gap-6 text-gray-400">
+                          <Link href="/promotions" className="hover:text-white transition-colors">
+                            {t('nav.currentPromotions')}
+                          </Link>
+                          <span className="hidden sm:flex items-center gap-1">
                       <Shield className="w-3 h-3" />
-                      {t('nav.officialDealer')}
+                            {contactData.span_text}
                     </span>
-                  </div>
-                </div>
+                        </div>
+                      </div>
+                    </>
+                ): (
+                    <div className="text-gray-500 text-sm">
+                      Contact information not available
+                    </div>
+                )}
+
               </div>
             </motion.div>
           )}

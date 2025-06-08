@@ -27,6 +27,7 @@ import { useTranslation } from '../../../hooks/useTranslation'
 import { masterDetailLocales } from './masterDetail'
 import {useLanguageStore} from "@/src/store/language";
 import axios from "axios";
+import { cleanHtmlContent } from '@/src/utils/cleanHtml'
 
 export default function MasterDetailPage() {
   const params = useParams()
@@ -102,9 +103,9 @@ export default function MasterDetailPage() {
             id: masterData.id,
             name: masterData.name || 'Не указано',
             avatar: masterData.avatar || null,
-            rating: 4.5, // Default rating as API doesn't provide this
-            reviewsCount: 0, // Default as API doesn't provide this
-            installations: 0, // Default as API doesn't provide this
+            rating: 4.5, 
+            reviewsCount: 0,
+            installations: 100,
             region: getRegionName(masterData.region),
             experience: masterData.experience || 'Не указан',
             specialization: masterData.specialization ?
@@ -116,7 +117,7 @@ export default function MasterDetailPage() {
             ],
             schedule: parseSchedule(masterData.schedule),
             phone: masterData.phone ? `+998 ${masterData.phone}` : 'Не указан',
-            about: 'Профессиональный установщик автосигнализаций с большим опытом работы.',
+            about: cleanHtmlContent(masterData.description) ||'Профессиональный установщик автосигнализаций с большим опытом работы.',
             services: [
                 {
                     id: 1,

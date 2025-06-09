@@ -262,7 +262,7 @@ export default function HomePage() {
                             balloonContent: `<strong>${point.name}</strong><br/>${point.type === 'dealer' ? 'Дилерский центр' : 'Сертифицированный мастер'}`
                         },
                         {
-                            preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#blueIcon'
+                            preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#redIcon'
                         }
                     );
                     map.geoObjects.add(placemark);
@@ -334,7 +334,7 @@ export default function HomePage() {
                         balloonContent: `<strong>${point.name}</strong><br/>${point.type === 'dealer' ? 'Дилерский центр' : 'Сертифицированный мастер'}`
                     },
                     {
-                        preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#blueIcon'
+                        preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#redIcon'
                     }
                 );
                 mapRef.current.geoObjects.add(placemark);

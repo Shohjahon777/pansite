@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import {useState, useEffect, useRef} from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { 
@@ -30,6 +30,10 @@ export default function ServicePage() {
   const [dealers, setDealers] = useState([])
   const [masters, setMasters] = useState([])
   const [regions, setRegions] = useState([])
+  const [points, setPoints] = useState([])
+  const mapRef = useRef(null)
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const { t } = useTranslation(serviceLocales)
   const {currentLocale} = useLanguageStore()
 
@@ -89,6 +93,7 @@ export default function ServicePage() {
      fetchDealers()
      fetchMasters()
      fetchRegions()
+    fetchCoords()
   }, [currentLocale]);
 
   const fetchDealers = async () => {
@@ -145,68 +150,175 @@ export default function ServicePage() {
   const filteredMasters = selectedRegion === 'all' 
     ? masters 
     : masters.filter(m => m.region === selectedRegion)
+
+  const fetchCoords = async () => {
+    try {
+      const response = await axios.post('/api/get-dealer-coords', { locale: currentLocale });
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setPoints(response.data);
+    } catch (error) {
+      console.error('Error fetching dealer coordinates:', error);
+    }
+  }
+
+  const transformDealerData = (dealers) => {
+    if (!dealers || !Array.isArray(dealers)) {
+      return [];
+    }
+
+    return dealers
+        .map(dealer => {
+          if (!dealer.coords || !Array.isArray(dealer.coords) || dealer.coords.length === 0) {
+            return null;
+          }
+
+          const coordString = dealer.coords[0]?.trim();
+          if (!coordString) return null;
+
+          const [latStr, lngStr] = coordString.split(',');
+          const lat = parseFloat(latStr?.trim());
+          const lng = parseFloat(lngStr?.trim());
+
+          if (isNaN(lat) || isNaN(lng)) return null;
+          if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+
+          return {
+            coords: [lat, lng],
+            name: dealer.name,
+            type: dealer.type
+          };
+        })
+        .filter(Boolean);
+  };
+
+  useEffect(() => {
+    if (points && points.length > 0 && currentLocale) {
+      setIsDataLoaded(true);
+    }
+  }, [points, currentLocale]);
+
+  const initializeMap = () => {
+    if (!window.ymaps || !isDataLoaded) {
+      console.error('Yandex Maps API not loaded or data not ready');
+      return;
+    }
+
+    window.ymaps.ready(() => {
+      const mapContainer = document.getElementById('service-map');
+      console.clear()
+
+      const transformedPoints = transformDealerData(points);
+      console.log('Transformed points:', transformedPoints);
+
+      if (!mapContainer) {
+        console.error('Map container not found');
+        return;
+      }
+
+      if (mapRef.current) {
+        mapRef.current.destroy();
+      }
+
+      const map = new window.ymaps.Map('service-map', {
+        center: [41.311081, 69.240562],
+        zoom: 12,
+        controls: ['zoomControl', 'fullscreenControl']
+      });
+
+      mapRef.current = map;
+
+      // Only add points if they exist
+      if (transformedPoints.length > 0) {
+        transformedPoints.forEach(point => {
+          const placemark = new window.ymaps.Placemark(
+              point.coords,
+              {
+                hintContent: point.name,
+                balloonContent: `<strong>${point.name}</strong><br/>${point.type === 'dealer' ? 'Дилерский центр' : 'Сертифицированный мастер'}`
+              },
+              {
+                preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#redIcon'
+              }
+          );
+          map.geoObjects.add(placemark);
+        });
+      }
+    });
+  };
   
   // Инициализация карты
   useEffect(() => {
     if (activeTab === 'map') {
-      const script = document.createElement('script')
-      script.src = 'https://api-maps.yandex.ru/2.1/?apikey=7689fb06-62e6-4db3-aa3d-be9373d43a89&lang=ru_RU'
-      script.async = true
-      script.onload = () => {
-        window.ymaps.ready(() => {
-          const map = new window.ymaps.Map('service-map', {
-            center: [41.311081, 69.240562],
-            zoom: 12,
-            controls: ['zoomControl', 'fullscreenControl']
-          })
-          
-          masters.forEach((master, index) => {
-            const coords = [
-              41.311081 + (Math.random() - 0.5) * 0.1,
-              69.240562 + (Math.random() - 0.5) * 0.1
-            ]
-            
-            const placemark = new window.ymaps.Placemark(coords, {
-              hintContent: master.name,
-              balloonContent: `
-                <div style="font-family: -apple-system, sans-serif;">
-                  <strong>${master.name}</strong><br/>
-                  <span style="color: #666;">★ ${master.rating}</span><br/>
-                  <span style="color: #888; font-size: 14px;">${master.phone}</span>
-                </div>
-              `
-            }, {
-              preset: 'islands#darkGrayDotIcon'
-            })
-            map.geoObjects.add(placemark)
-          })
-          
-          dealers.forEach((dealer) => {
-            const placemark = new window.ymaps.Placemark([41.311081, 69.240562], {
-              hintContent: dealer.name,
-              balloonContent: `
-                <div style="font-family: -apple-system, sans-serif;">
-                  <strong>${dealer.name}</strong><br/>
-                  <span style="color: #666;">Дилерский центр</span><br/>
-                  <span style="color: #888; font-size: 14px;">${dealer.phone}</span>
-                </div>
-              `
-            }, {
-              preset: 'islands#darkBlueStretchyIcon'
-            })
-            map.geoObjects.add(placemark)
-          })
-        })
+      if (isDataLoaded) {
+        const loadYandexMaps = () => {
+          if (window.ymaps) {
+            initializeMap();
+            return;
+          }
+
+          if (document.querySelector('script[src*="api-maps.yandex.ru"]')) {
+            const checkReady = () => {
+              if (window.ymaps) {
+                initializeMap();
+              } else {
+                setTimeout(checkReady, 100);
+              }
+            };
+            checkReady();
+            return;
+          }
+
+          const script = document.createElement('script');
+          script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU';
+          script.async = true;
+          script.onload = () => {
+            setMapLoaded(true);
+            initializeMap();
+          };
+          script.onerror = (error) => {
+            console.error('Failed to load Yandex Maps API:', error);
+          };
+          document.head.appendChild(script);
+        };
+
+        loadYandexMaps();
       }
-      document.body.appendChild(script)
-      
+
+      // Cleanup function
       return () => {
-        if (script.parentNode) {
-          script.parentNode.removeChild(script)
+        if (mapRef.current) {
+          try {
+            mapRef.current.destroy();
+          } catch (error) {
+            console.error('Error destroying map:', error);
+          }
         }
-      }
+      };
     }
-  }, [activeTab])
+  }, [activeTab, isDataLoaded])
+
+  useEffect(() => {
+    if (mapRef.current && window.ymaps && points.length > 0 && isDataLoaded) {
+      mapRef.current.geoObjects.removeAll();
+
+      const transformedPoints = transformDealerData(points);
+      transformedPoints.forEach(point => {
+        const placemark = new window.ymaps.Placemark(
+            point.coords,
+            {
+              hintContent: point.name,
+              balloonContent: `<strong>${point.name}</strong><br/>${point.type === 'dealer' ? 'Дилерский центр' : 'Сертифицированный мастер'}`
+            },
+            {
+              preset: point.type === 'dealer' ? 'islands#darkBlueIcon' : 'islands#redIcon'
+            }
+        );
+        mapRef.current.geoObjects.add(placemark);
+      });
+    }
+  }, [points, isDataLoaded]);
   
   return (
     <div className="page-container min-h-screen bg-black">

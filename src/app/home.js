@@ -81,6 +81,12 @@ export const homeLocales = {
                 installation: 'Установка в день обращения'
             },
             showAll: 'Показать всех'
+        },
+        cta: {
+            readyProtection: "Готовы к максимальной защите?",
+            chooseSystem: "Выберите систему и получите профессиональную установку уже сегодня\n",
+            choose: "Выбрать систему",
+            find: "Найти мастера"
         }
     },
     uz: {
@@ -165,6 +171,12 @@ export const homeLocales = {
                 installation: 'Murojaat kunida oʻrnatish'
             },
             showAll: 'Barchasini koʻrsatish'
+        },
+        cta: {
+            readyProtection: "Maksimal darajada himoyaga tayyormisiz?",
+            chooseSystem: "Tizimni tanlang va professional o‘rnatish xizmatini bugunoq oling!",
+            choose: "Tizimni tanlash",
+            find: "Ustani topish"
         }
     }
 }

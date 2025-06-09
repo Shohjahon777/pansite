@@ -54,7 +54,6 @@ export default function HomePage() {
     const [slides, setSlides] = useState([])
     const [stats, setStats] = useState([])
     const [points, setPoints] = useState([])
-    const [mapLoaded, setMapLoaded] = useState(false)
     const mapRef = useRef(null)
     const { scrollY } = useScroll()
     const { t } = useTranslation(homeLocales)
@@ -64,6 +63,8 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [retryCount, setRetryCount] = useState(0)
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [mapLoaded, setMapLoaded] = useState(false);
 
     const y = useTransform(scrollY, [0, 300], [0, 50])
     const opacity = useTransform(scrollY, [0, 300], [1, 0.8])
@@ -214,16 +215,26 @@ export default function HomePage() {
             .filter(Boolean);
     };
 
-    // Replace your existing useEffect and initializeMap function with this:
+
+    useEffect(() => {
+        if (points && points.length > 0 && currentLocale) {
+            setIsDataLoaded(true);
+        }
+    }, [points, currentLocale]);
 
     const initializeMap = () => {
-        if (!window.ymaps) {
-            console.error('Yandex Maps API not loaded');
+        if (!window.ymaps || !isDataLoaded) {
+            console.error('Yandex Maps API not loaded or data not ready');
             return;
         }
 
         window.ymaps.ready(() => {
-            const mapContainer = document.getElementById('map');
+            const mapContainer = document.getElementById('main-map');
+            console.clear()
+
+            const transformedPoints = transformDealerData(points);
+            console.log('Transformed points:', transformedPoints);
+
             if (!mapContainer) {
                 console.error('Map container not found');
                 return;
@@ -233,8 +244,7 @@ export default function HomePage() {
                 mapRef.current.destroy();
             }
 
-
-            const map = new window.ymaps.Map('map', {
+            const map = new window.ymaps.Map('main-map', {
                 center: [41.311081, 69.240562],
                 zoom: 12,
                 controls: ['zoomControl', 'fullscreenControl']
@@ -243,8 +253,6 @@ export default function HomePage() {
             mapRef.current = map;
 
             // Only add points if they exist
-            const transformedPoints = transformDealerData(points);
-
             if (transformedPoints.length > 0) {
                 transformedPoints.forEach(point => {
                     const placemark = new window.ymaps.Placemark(
@@ -263,39 +271,42 @@ export default function HomePage() {
         });
     };
 
+// Update your useEffect to depend on data loading state
     useEffect(() => {
-        const loadYandexMaps = () => {
-            if (window.ymaps) {
-                initializeMap();
-                return;
-            }
+        if (isDataLoaded) {
+            const loadYandexMaps = () => {
+                if (window.ymaps) {
+                    initializeMap();
+                    return;
+                }
 
-            if (document.querySelector('script[src*="api-maps.yandex.ru"]')) {
-                const checkReady = () => {
-                    if (window.ymaps) {
-                        initializeMap();
-                    } else {
-                        setTimeout(checkReady, 100);
-                    }
+                if (document.querySelector('script[src*="api-maps.yandex.ru"]')) {
+                    const checkReady = () => {
+                        if (window.ymaps) {
+                            initializeMap();
+                        } else {
+                            setTimeout(checkReady, 100);
+                        }
+                    };
+                    checkReady();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU';
+                script.async = true;
+                script.onload = () => {
+                    setMapLoaded(true);
+                    initializeMap();
                 };
-                checkReady();
-                return;
-            }
-
-            const script = document.createElement('script');
-            script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU';
-            script.async = true;
-            script.onload = () => {
-                setMapLoaded(true);
-                initializeMap();
+                script.onerror = (error) => {
+                    console.error('Failed to load Yandex Maps API:', error);
+                };
+                document.head.appendChild(script);
             };
-            script.onerror = (error) => {
-                console.error('Failed to load Yandex Maps API:', error);
-            };
-            document.head.appendChild(script);
-        };
 
-        loadYandexMaps();
+            loadYandexMaps();
+        }
 
         // Cleanup function
         return () => {
@@ -307,13 +318,13 @@ export default function HomePage() {
                 }
             }
         };
-    }, []);
+    }, [isDataLoaded]); // Depend on data loading state
 
+// Update points effect
     useEffect(() => {
-        if (mapRef.current && window.ymaps && points.length > 0) {
+        if (mapRef.current && window.ymaps && points.length > 0 && isDataLoaded) {
             mapRef.current.geoObjects.removeAll();
 
-            // Add new points
             const transformedPoints = transformDealerData(points);
             transformedPoints.forEach(point => {
                 const placemark = new window.ymaps.Placemark(
@@ -329,7 +340,7 @@ export default function HomePage() {
                 mapRef.current.geoObjects.add(placemark);
             });
         }
-    }, [points]); // This effect runs when points change
+    }, [points, isDataLoaded]);
 
     // Auto-slide effect
     useEffect(() => {
@@ -624,7 +635,7 @@ export default function HomePage() {
 
                     <div className="relative">
                         <div className="bg-gray-950 border border-gray-800 overflow-hidden">
-                            <div id="map" className="w-full h-[600px] bg-gray-900 flex items-center justify-center">
+                            <div id="main-map" className="w-full h-[600px] bg-gray-900 flex items-center justify-center">
                                 {!mapLoaded && points.length > 0 && (
                                     <div className="text-gray-400">Загрузка карты...</div>
                                 )}
@@ -675,19 +686,19 @@ export default function HomePage() {
                 >
                     <Cpu className="w-20 h-20 text-gray-700 mx-auto mb-8" strokeWidth={1} />
                     <h2 className="text-4xl lg:text-5xl font-thin text-white mb-6">
-                        Готовы к максимальной защите?
+                        {t('cta.readyProtection')}
                     </h2>
                     <p className="text-xl text-gray-400 mb-10 font-light">
-                        Выберите систему и получите профессиональную установку уже сегодня
+                        {t('cta.chooseSystem')}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href="/products"
                             className="bg-white text-black px-8 py-4 hover:bg-gray-100 transition-colors">
-                            <span className="font-medium">Выбрать систему</span>
+                            <span className="font-medium">{t('cta.choose')}</span>
                         </Link>
                         <Link href="/service"
                             className="border border-gray-700 text-white px-8 py-4 hover:bg-gray-900 transition-colors">
-                            <span className="font-medium">Найти мастера</span>
+                            <span className="font-medium">{t('cta.find')}</span>
                         </Link>
                     </div>
                 </motion.div>

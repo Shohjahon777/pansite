@@ -204,7 +204,8 @@ export default function MasterDetailPage() {
                 repeatClients: 80
             },
             reviews: [],
-            certificates: certifications || []
+            certificates: certifications || [],
+            location: (masterData.lat_lng || []).map(parseFloat),
         };
     };
 
@@ -252,13 +253,15 @@ export default function MasterDetailPage() {
                 if (window.ymaps) {
                     window.ymaps.ready(() => {
                         const map = new window.ymaps.Map('master-map', {
-                            center: [41.311081, 69.240562],
+                            // center: [41.311081, 69.240562],
+                            center: master.location,
                             zoom: 14,
                             controls: ['zoomControl', 'fullscreenControl']
                         })
 
                         const placemark = new window.ymaps.Placemark(
-                            [41.311081, 69.240562],
+                            master.location,
+                            // [41.311081, 69.240562],
                             {
                                 hintContent: master.name,
                                 balloonContent: `<strong>${master.name}</strong><br/>📱 ${master.phone}`
@@ -458,7 +461,8 @@ export default function MasterDetailPage() {
                             <div className="bg-gray-950 border border-gray-800 p-4 sm:p-6 lg:col-span-2">
                                 <div className="flex items-center gap-2 mb-6">
                                     <Award className="w-6 h-6 text-blue-400"/>
-                                    <h3 className="font-light text-lg text-white">Certificates</h3>
+                                    {/*<h3 className="font-light text-lg text-white">{t('master')}</h3>*/}
+                                    <h3 className="font-light text-lg text-white">{t('masterDetail.certificates')}</h3>
                                     <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded-full text-xs">
                                         {master.certificates.length}
                                     </span>
@@ -489,7 +493,7 @@ export default function MasterDetailPage() {
 
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
                                                 <div className="bg-white/90 text-gray-900 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
-                                                    View Certificate
+                                                    {t('masterDetail.viewCertificate')}
                                                 </div>
                                             </div>
 

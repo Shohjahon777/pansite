@@ -220,7 +220,7 @@ export default function ProductDetailPage() {
                             {/* Main Product Image */}
                             {currentProduct.images && currentProduct.images.length > 0 ? (
                                 <img
-                                    src={`{currentProduct.images}`[selectedImageIndex]}
+                                    src={`${currentProduct.images}`}
                                     alt={currentProduct.name}
                                     className="w-48 h-48 object-contain"
                                     onError={(e) => {
@@ -238,7 +238,6 @@ export default function ProductDetailPage() {
                             />
                         </div>
 
-                        {/* Thumbnail Images - only show if there are multiple images */}
                         {currentProduct.images && currentProduct.images.length > 1 && (
                             <div className="flex gap-4 mt-4 flex-wrap">
                                 {currentProduct.images.map((image, index) => (

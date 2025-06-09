@@ -233,11 +233,9 @@ export default function HomePage() {
                 mapRef.current.destroy();
             }
 
-            // Always start with Tashkent coordinates - this is your default view
-            const tashkentCoords = [41.311081, 69.240562];
 
             const map = new window.ymaps.Map('map', {
-                center: tashkentCoords,
+                center: [41.311081, 69.240562],
                 zoom: 12,
                 controls: ['zoomControl', 'fullscreenControl']
             });
@@ -248,7 +246,6 @@ export default function HomePage() {
             const transformedPoints = transformDealerData(points);
 
             if (transformedPoints.length > 0) {
-                // Add points to map
                 transformedPoints.forEach(point => {
                     const placemark = new window.ymaps.Placemark(
                         point.coords,
@@ -310,12 +307,10 @@ export default function HomePage() {
                 }
             }
         };
-    }, []); // Empty dependency array - load map once on component mount
+    }, []);
 
-    // Add a separate effect to update map when points change
     useEffect(() => {
         if (mapRef.current && window.ymaps && points.length > 0) {
-            // Clear existing placemarks
             mapRef.current.geoObjects.removeAll();
 
             // Add new points

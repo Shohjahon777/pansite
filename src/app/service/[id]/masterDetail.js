@@ -39,6 +39,7 @@ export const masterDetailLocales = {
                 repeatClients: 'Постоянные клиенты'
             },
             certificates: 'Сертификаты',
+            viewCertificate: 'Посмотреть',
             choose: 'Выбрать',
             installedSystem: 'Установлена',
             allReviewsAboutMaster: 'Все отзывы о мастере',
@@ -97,6 +98,7 @@ export const masterDetailLocales = {
                 repeatClients: 'Doimiy mijozlar'
             },
             certificates: 'Sertifikatlar',
+            viewCertificate: 'Ko\'rish',
             choose: 'Tanlash',
             installedSystem: 'O\'rnatilgan',
             allReviewsAboutMaster: 'Usta haqida barcha sharhlar',

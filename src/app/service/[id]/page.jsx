@@ -167,7 +167,7 @@ export default function MasterDetailPage() {
             avatar: masterData.avatar || null,
             rating: 4.5,
             reviewsCount: 0,
-            installations: 100,
+            installations: masterData.installations || 100,
             region: getRegionName(masterData.region),
             experience: masterData.experience || 'Не указан',
             specialization: masterData.specialization ?
@@ -198,7 +198,7 @@ export default function MasterDetailPage() {
             ],
             gallery: [],
             stats: {
-                satisfaction: 95,
+                satisfaction: masterData.satisfaction || 95,
                 onTime: 90,
                 warranty: 100,
                 repeatClients: 80

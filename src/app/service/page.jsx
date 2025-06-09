@@ -93,7 +93,7 @@ export default function ServicePage() {
      fetchDealers()
      fetchMasters()
      fetchRegions()
-    fetchCoords()
+     fetchCoords()
   }, [currentLocale]);
 
   const fetchDealers = async () => {

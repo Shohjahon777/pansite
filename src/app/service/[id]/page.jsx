@@ -467,7 +467,7 @@ export default function MasterDetailPage() {
                                 <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
                                     {master.certificates.map((cert, index) => (
                                         <div
-                                            key={cert.id || index}
+                                            key={cert.sert_id || index}
                                             className="group relative aspect-[3/4] bg-gray-900 border border-gray-800 rounded-lg overflow-hidden cursor-pointer transition-all duration-200 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20"
                                             onClick={() => openModal(index)}
                                         >
@@ -538,7 +538,7 @@ export default function MasterDetailPage() {
                             <img
                                 src={`https://crm.carsale.uz/b/core/m$load_image?sha=${master.certificates[currentImageIndex].certificates}`}
                                 alt={`Certificate ${currentImageIndex + 1}`}
-                                className="w-full h-full object-contain rounded-lg"
+                                className="w-full h-screen object-contain rounded-lg"
                             />
 
                             {/* Image info */}
@@ -565,7 +565,7 @@ export default function MasterDetailPage() {
                                         <img
                                             src={`https://crm.carsale.uz/b/core/m$load_image?sha=${cert.certificates}`}
                                             alt={`Thumbnail ${index + 1}`}
-                                            className="w-full h-screen object-cover"
+                                            className="w-full h-full object-cover"
                                         />
                                     </button>
                                 ))}

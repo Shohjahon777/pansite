@@ -262,40 +262,18 @@ export default function HomePage() {
                     );
                     map.geoObjects.add(placemark);
                 });
-
-                // OPTIONAL: Only adjust bounds if you have multiple points AND want to show them all
-                // Comment out this block if you want to always keep Tashkent as center
-                /*
-                if (transformedPoints.length > 1) {
-                    setTimeout(() => {
-                        try {
-                            const bounds = transformedPoints.map(point => point.coords);
-                            map.setBounds(bounds, {
-                                checkZoomRange: true,
-                                zoomMargin: 50
-                            });
-                        } catch (err) {
-                            console.error('Failed to set map bounds:', err);
-                        }
-                    }, 100);
-                }
-                */
             }
         });
     };
 
-    // Replace your existing useEffect with this:
     useEffect(() => {
         const loadYandexMaps = () => {
-            // Check if API is already loaded
             if (window.ymaps) {
                 initializeMap();
                 return;
             }
 
-            // Check if script is already being loaded
             if (document.querySelector('script[src*="api-maps.yandex.ru"]')) {
-                // If script exists but ymaps not ready, wait and try again
                 const checkReady = () => {
                     if (window.ymaps) {
                         initializeMap();

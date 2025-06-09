@@ -73,11 +73,10 @@ export default function ProductsPage() {
         monthly: Math.round(parseInt(product.price) / 12),
         rating: 4.5 + Math.random() * 0.4, // Random rating between 4.5-4.9
         reviews: Math.floor(Math.random() * 200) + 50, // Random reviews 50-250
-        badge: getBadgeForProduct(product.name),
+        badge: product.badge,
         icon: getIconForProduct(product.name),
         features: getFeaturesForProduct(product.name),
         compatibility: getCompatibilityForProduct(product.name),
-        // Handle image URL
         imageUrl: product.img && product.img.includes('sha=') && !product.img.endsWith('sha=')
             ? product.img
             : null
@@ -301,17 +300,15 @@ export default function ProductsPage() {
                       {/*</div>*/}
 
                       <div className="space-y-2 mb-6">
-                        {product.features.slice(0, 3).map((feature, j) => (
-                            <div key={j} className="flex items-start gap-2 text-sm text-gray-400">
+                            <div className="flex items-start gap-2 text-sm text-gray-400">
                               <Check className="w-4 h-4 mt-0.5 text-gray-600" />
-                              <span className="font-light">{feature}</span>
+                              <span className="font-light">{product.description}</span>
                             </div>
-                        ))}
-                        {product.features.length > 3 && (
-                            <div className="text-sm text-gray-600 pl-6">
-                              +{product.features.length - 3} {t('products.moreFeatures')}
-                            </div>
-                        )}
+                        {/*{product.features.length > 3 && (*/}
+                        {/*    <div className="text-sm text-gray-600 pl-6">*/}
+                        {/*      +{product.features.length - 3} {t('products.moreFeatures')}*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                       </div>
 
                       {/*<div className="mb-6">*/}

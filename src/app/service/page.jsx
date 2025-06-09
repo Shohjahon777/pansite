@@ -342,11 +342,13 @@ export default function ServicePage() {
                   </div>
                   
                   <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-2">Специализация:</p>
+                    <p className="text-xs text-gray-500 mb-2">{t('service.specialization')}:</p>
                     <div className="flex flex-wrap gap-1">
-                        <span className="text-xs px-2 py-1 bg-gray-900 text-gray-400">
-                          {master.specialization}
+                      {master.specialization.map(spec => (
+                          <span className="text-xs px-2 py-1 bg-gray-900 text-gray-400">
+                          {spec}
                         </span>
+                      ))}
                     </div>
                   </div>
                   

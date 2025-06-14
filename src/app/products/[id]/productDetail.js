@@ -85,7 +85,9 @@ export const productDetailLocales = {
                 support1000: 'Поддержка более 1000 моделей',
                 premiumAll: 'Премиум автомобили всех марок',
                 '100percent': '100% совместимость с современными авто'
-            }
+            },
+            currency: 'Сум',
+            noCompatibilityInfo: 'Нет информации о совместимости'
         }
     },
     uz: {
@@ -174,7 +176,9 @@ export const productDetailLocales = {
                 support1000: '1000 dan ortiq modellarga mos',
                 premiumAll: 'Barcha brendlarning premium avtomobillari',
                 '100percent': 'Zamonaviy avtomobillar bilan 100% moslik'
-            }
+            },
+            currency: "So'm",
+            noCompatibilityInfo: 'Moslik haqida ma\'lumot yo\'q\n'
         }
     }
 

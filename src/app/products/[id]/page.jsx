@@ -20,6 +20,7 @@ import {useTranslation} from '../../../hooks/useTranslation'
 import {productDetailLocales} from './productDetail'
 import axios from "axios";
 import {useLanguageStore} from "@/src/store/language";
+import {stripHtmlTags} from "@/src/utils/cleanHtml";
 
 export default function ProductDetailPage() {
     const params = useParams()
@@ -53,7 +54,6 @@ export default function ProductDetailPage() {
     // Function to process API product data into component format
     const processProductData = (apiProduct) => {
         const basePrice = parseInt(apiProduct.price) || 250000
-        const usdPrice = Math.round(basePrice / 12500)
 
         // Process technical specifications
         const technicalSpecs = {}
@@ -115,10 +115,10 @@ export default function ProductDetailPage() {
         return {
             id: apiProduct.id,
             name: apiProduct.name,
-            price: usdPrice,
+            price: apiProduct.price,
             rating: 4.5 + (Math.random() * 0.4), // Generate rating between 4.5-4.9
             reviewsCount: Math.floor(Math.random() * 200) + 50,
-            description: description,
+            description: stripHtmlTags(description),
             icon: getProductIcon(apiProduct.name, apiProduct.category),
             images: images,
             cardLabel: apiProduct.card_label || null,
@@ -286,7 +286,7 @@ export default function ProductDetailPage() {
                         <p className="text-gray-400 mb-8 font-light">{currentProduct.description}</p>
 
                         <div className="bg-gray-950 border border-gray-800 p-6 mb-6">
-                            <div className="text-4xl font-thin text-white mb-2">${currentProduct.price}</div>
+                            <div className="text-4xl font-thin text-white mb-2">{currentProduct.price} {t('productDetail.currency')}</div>
                             <button className="w-full bg-white text-black py-3 mb-2 hover:bg-gray-100 transition-colors font-medium flex items-center justify-center gap-2">
                                 <ShoppingCart className="w-5 h-5"/>
                                 {t('productDetail.orderInstallation')}

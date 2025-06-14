@@ -14,12 +14,25 @@ import {
   DollarSign,
   Star
 } from 'lucide-react'
-import { useTranslation } from '../../../hooks/useTranslation'
 import { accountLocales } from '../accountLocales'
+import {authAPI} from "@/src/utils/api";
+import { useRouter } from 'next/navigation'
+import {useTranslation} from "@/src/hooks/useTranslation";
 
 export default function MasterDashboard() {
   const [activeTab, setActiveTab] = useState('requests')
   const { t } = useTranslation(accountLocales)
+
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout()
+      await router.replace('/')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
   
   const stats = {
     today: 3,
@@ -84,7 +97,7 @@ export default function MasterDashboard() {
           <h1 className="text-3xl font-thin text-white">{t('account.master.title')}</h1>
           <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
             <LogOut className="w-4 h-4" />
-            <span className="text-sm">{t('account.logout')}</span>
+            <span className="text-sm" onClick={handleLogout}>{t('account.logout')}</span>
           </button>
         </div>
         

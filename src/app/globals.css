@@ -22,3 +22,165 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+.not-authenticated,
+.not-client {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 200px;
+}
+
+.auth-message,
+.role-message {
+  text-align: center;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px dashed #e0e0e0;
+  background-color: #fafafa;
+}
+
+.auth-message svg,
+.role-message svg {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.auth-message h3,
+.role-message h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.auth-message p,
+.role-message p {
+  margin: 0 0 1.5rem 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.login-btn:active {
+  transform: translateY(1px);
+}
+
+.role-info {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-left: 4px solid #ffc107;
+}
+
+.role-info p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.role-info strong {
+  color: #333;
+  text-transform: capitalize;
+}
+
+.not-authenticated.compact,
+.not-client.compact {
+  min-height: auto;
+  padding: 1rem;
+}
+
+.not-authenticated.compact .auth-message,
+.not-client.compact .role-message {
+  padding: 1rem;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.not-authenticated.inline,
+.not-client.inline {
+  display: inline-flex;
+  min-height: auto;
+  padding: 0.5rem;
+}
+
+.not-authenticated.inline .auth-message,
+.not-client.inline .role-message {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.not-authenticated.alert {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.not-authenticated.alert .auth-message {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.not-client.alert {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.not-client.alert .role-message {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.not-authenticated.dark,
+.not-client.dark {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.not-authenticated.dark .auth-message,
+.not-client.dark .role-message {
+  background-color: #2d2d2d;
+  border-color: #444;
+  color: #fff;
+}
+
+.not-authenticated.dark .auth-message h3,
+.not-client.dark .role-message h3 {
+  color: #fff;
+}
+
+.not-authenticated.dark .auth-message p,
+.not-client.dark .role-message p {
+  color: #ccc;
+}
+
+.not-authenticated.dark .role-info {
+  background-color: #333;
+  border-left-color: #ffc107;
+}

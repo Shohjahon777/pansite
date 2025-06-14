@@ -12,12 +12,18 @@ import {
   Clock,
   X
 } from 'lucide-react'
-import { useTranslation } from '../../../hooks/useTranslation'
 import { accountLocales } from '../accountLocales'
+import {authAPI} from "@/src/utils/api";
+import {useRouter} from "next/navigation";
+import {useTranslation} from "@/src/hooks/useTranslation";
 
 export default function ClientDashboard() {
   const [activeTab, setActiveTab] = useState('requests')
   const { t } = useTranslation(accountLocales)
+
+  const router = useRouter()
+
+
   
   const requests = [
     {
@@ -43,6 +49,15 @@ export default function ClientDashboard() {
       canReview: true
     }
   ]
+
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout()
+      await router.replace('/')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
   
   const [serialNumber, setSerialNumber] = useState('')
   const [warrantyResult, setWarrantyResult] = useState(null)
@@ -81,9 +96,9 @@ export default function ClientDashboard() {
       <div className="max-w-6xl mx-auto px-4 py-20">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-thin text-white">{t('account.client.title')}</h1>
-          <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+          <button  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
             <LogOut className="w-4 h-4" />
-            <span className="text-sm">{t('account.logout')}</span>
+            <span className="text-sm" onClick={handleLogout}>{t('account.logout')}</span>
           </button>
         </div>
         

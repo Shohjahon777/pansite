@@ -19,6 +19,7 @@ import { productsLocales } from './products'
 import { FilterDropdown } from '@/src/components/FilterDropdown'
 import { useLanguageStore } from '@/src/store/language'
 import axios from 'axios'
+import {cleanHtmlContent, stripHtmlTags} from "@/src/utils/cleanHtml";
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState(null)
@@ -67,16 +68,15 @@ export default function ProductsPage() {
       // Transform API response to match component expectations
       const transformedProducts = response.data.map(product => ({
         ...product,
-        // Convert price to number for proper display
         price: parseInt(product.price),
-        // Add missing properties with defaults
-        monthly: Math.round(parseInt(product.price) / 12),
+
         rating: 4.5 + Math.random() * 0.4, // Random rating between 4.5-4.9
         reviews: Math.floor(Math.random() * 200) + 50, // Random reviews 50-250
         badge: product.badge,
         icon: getIconForProduct(product.name),
         features: getFeaturesForProduct(product.name),
         compatibility: getCompatibilityForProduct(product.name),
+        description: stripHtmlTags(product.description),
         imageUrl: product.img && product.img.includes('sha=') && !product.img.endsWith('sha=')
             ? product.img
             : null
@@ -292,37 +292,13 @@ export default function ProductsPage() {
                     </Link>
 
                     <div className="p-8">
-                      {/*<div className="mb-6">*/}
-                      {/*  <div className="text-3xl font-thin text-white">${product.price.toLocaleString()}</div>*/}
-                      {/*  <div className="text-sm text-gray-500">*/}
-                      {/*    {t('products.or')} ${product.monthly}/{t('products.month')}*/}
-                      {/*  </div>*/}
-                      {/*</div>*/}
 
                       <div className="space-y-2 mb-6">
                             <div className="flex items-start gap-2 text-sm text-gray-400">
                               <Check className="w-4 h-4 mt-0.5 text-gray-600" />
                               <span className="font-light">{product.description}</span>
                             </div>
-                        {/*{product.features.length > 3 && (*/}
-                        {/*    <div className="text-sm text-gray-600 pl-6">*/}
-                        {/*      +{product.features.length - 3} {t('products.moreFeatures')}*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
                       </div>
-
-                      {/*<div className="mb-6">*/}
-                      {/*  <div className="flex justify-between text-sm mb-1">*/}
-                      {/*    <span className="text-gray-500">test</span>*/}
-                      {/*    <span className="text-gray-400">{product.compatibility}</span>*/}
-                      {/*  </div>*/}
-                      {/*  <div className="w-full bg-gray-900 h-1">*/}
-                      {/*    <div*/}
-                      {/*        className="h-full bg-gradient-to-r from-gray-700 to-gray-600"*/}
-                      {/*        style={{ width: product.compatibility }}*/}
-                      {/*    />*/}
-                      {/*  </div>*/}
-                      {/*</div>*/}
 
                       <div className="space-y-3">
                         <button
@@ -366,7 +342,6 @@ export default function ProductsPage() {
             ))}
           </div>
 
-          {/* No Products Message */}
           {filteredProducts.length === 0 && !loading && (
               <div className="text-center py-16">
                 <div className="text-gray-500 text-lg mb-4">No products found</div>
@@ -374,7 +349,6 @@ export default function ProductsPage() {
               </div>
           )}
 
-          {/* Compare Button */}
           {compareList.length > 1 && (
               <motion.div
                   initial={{ opacity: 0 }}
